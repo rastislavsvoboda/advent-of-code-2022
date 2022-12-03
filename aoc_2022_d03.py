@@ -22,10 +22,10 @@ def solve1(lines):
         p2 = line[half:]
         C1 = set([c for c in p1])
         C2 = set([c for c in p2])
-        inter = C1.intersection(C2)
-        # print(inter)
-        assert len(inter) == 1
-        COMP.append(list(inter)[0])
+        common = C1.intersection(C2)
+        # print(common)
+        assert len(common) == 1
+        COMP.append(common.pop())
 
     res = sum([priority(c) for c in COMP])
 
@@ -45,10 +45,10 @@ def solve2(lines):
         C1 = set([c for c in line1])
         C2 = set([c for c in line2])
         C3 = set([c for c in line3])
-        inter = C1.intersection(C2).intersection(C3)
-        # print(inter)
-        assert len(inter) == 1
-        COMP.append(list(inter)[0])
+        common = C1.intersection(C2).intersection(C3)
+        # print(common)
+        assert len(common) == 1
+        COMP.append(common.pop())
 
     res = sum([priority(c) for c in COMP])
 
