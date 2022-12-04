@@ -7,12 +7,12 @@ lines = open('4.in').readlines()
 
 
 def in_range(s1, e1, s2, e2):
-    # s2-e2 in range of s1-s2
+    # s2-e2 in range of s1-e2
     return s1 <= s2 <= e1 and s1 <= e2 <= e1
 
 
 def overlap(s1, e1, s2, e2):
-    # s2-e2 overlap s1-s2
+    # s2-e2 overlap s1-e2
     return s1 <= s2 <= e1 or s1 <= e2 <= e1
 
 
