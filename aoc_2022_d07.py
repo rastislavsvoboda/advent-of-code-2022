@@ -32,12 +32,10 @@ def solve(lines):
         if words[0] == "$":
             # command
             if words[1] == "cd":
-                # print("->cd")
                 if words[2] == "..":
                     current.pop()
                 else:
                     current.append(words[2])
-                # print("->current dir", current)
             elif words[1] == "ls":
                 pass
         else:
@@ -47,8 +45,8 @@ def solve(lines):
                 d_name = cd_name + "/" + words[1]
                 D[cd_name].append(("d", d_name, 0))
             else:
-                f_name = words[1]
                 f_size = int(words[0])
+                f_name = words[1]
                 D[cd_name].append(("f", f_name, f_size))
         i += 1
 
