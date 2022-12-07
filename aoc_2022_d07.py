@@ -35,6 +35,7 @@ def solve(lines):
         line = lines[i].strip()
         words = line.split()
         # print(i, words)
+        i += 1
         if words[0] == "$":
             # command
             if words[1] == "cd":
@@ -45,7 +46,7 @@ def solve(lines):
                 else:
                     current.append(words[2])
             elif words[1] == "ls":
-                pass
+                continue
         else:
             # output
             cd_name = "/".join(current)
@@ -56,7 +57,6 @@ def solve(lines):
                 f_size = int(words[0])
                 f_name = words[1]
                 D[cd_name].append(("f", f_name, f_size))
-        i += 1
 
     # print(D.keys())
 
