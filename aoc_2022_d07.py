@@ -11,13 +11,19 @@ lines_sample = open('7.ex1').readlines()
 lines_puzzle = open('7.in').readlines()
 
 
-def get_d_size(D, dir_name):
+def get_d_size(D, S, dir_name):
+    if dir_name in S:
+        return S[dir_name]
+
     total_size = 0
     for (type, name, size) in D[dir_name]:
         if type == 'd':
-            total_size += get_d_size(D, name)
+            total_size += get_d_size(D, S, name)
         else:
+            assert(type == 'f')
             total_size += size
+
+    S[dir_name] = total_size         
     return total_size
 
 
@@ -34,6 +40,8 @@ def solve(lines):
             if words[1] == "cd":
                 if words[2] == "..":
                     current.pop()
+                elif words[2] == "/":
+                    current = ["/"]
                 else:
                     current.append(words[2])
             elif words[1] == "ls":
@@ -54,7 +62,7 @@ def solve(lines):
 
     S = defaultdict(int)
     for k in D.keys():
-        S[k] = get_d_size(D, k)
+        S[k] = get_d_size(D, S, k)
 
     # part 1
     res1 = sum(list(filter(lambda s: s <= 100000,  S.values())))
