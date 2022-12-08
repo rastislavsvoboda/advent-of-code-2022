@@ -17,69 +17,64 @@ def is_visible(D, r, c):
     R = len(D)
     C = len(D[0])
     tree = D[r][c]
-    if r == 0 or r == R-1:
-        return True
-    if c == 0 or c == C-1:
-        return True
 
-    not_v = 0
+    up = True
     for i in range(0, r):
         if D[i][c] >= tree:
-            not_v += 1
+            up = False
             break
 
+    down = True
     for i in range(r+1, R):
         if D[i][c] >= tree:
-            not_v += 1
+            down = False
             break
 
+    left = True
     for i in range(0, c):
         if D[r][i] >= tree:
-            not_v += 1
+            left = False
             break
 
+    right = True
     for i in range(c+1, C):
         if D[r][i] >= tree:
-            not_v += 1
+            right = False
             break
 
-    return not_v < 4
+    return up or down or left or right
 
 
 def score(D, r, c):
     R = len(D)
     C = len(D[0])
     tree = D[r][c]
-    if r == 0 or r == R-1:
-        return 0
-    if c == 0 or c == C-1:
-        return 0
 
-    up = 1
-    rr = r-1
-    while rr > 0 and tree > D[rr][c]:
-        rr -= 1
+    up = 0
+    for rr in range(r-1, -1, -1):
         up += 1
+        if tree <= D[rr][c]:
+            break
 
-    down = 1
-    rr = r+1
-    while rr < R-1 and tree > D[rr][c]:
-        rr += 1
+    down = 0
+    for rr in range(r+1, R):
         down += 1
+        if tree <= D[rr][c]:
+            break
 
-    left = 1
-    cc = c-1
-    while cc > 0 and tree > D[r][cc]:
-        cc -= 1
+    left = 0
+    for cc in range(c-1, -1, -1):
         left += 1
+        if tree <= D[r][cc]:
+            break
 
-    right = 1
-    cc = c+1
-    while cc < C-1 and tree > D[r][cc]:
-        cc += 1
+    right = 0
+    for cc in range(c+1, C):
         right += 1
+        if tree <= D[r][cc]:
+            break
 
-    return up * left * down * right
+    return up * down * left *  right
 
 
 def solve1(lines):
@@ -96,7 +91,6 @@ def solve1(lines):
     for r in range(R):
         for c in range(C):
             vis = is_visible(D, r, c)
-            # print(D[r][c], vis)
             if vis:
                 res1 += 1
 
