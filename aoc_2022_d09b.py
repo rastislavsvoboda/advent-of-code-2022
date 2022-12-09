@@ -26,8 +26,7 @@ def move(head, direction):
 def follow(head, tail):
     h_r, h_c = head
     t_r, t_c = tail
-
-    if not (-1 <= (h_r - t_r) <= 1 and -1 <= (h_c - t_c) <= 1):
+    if not (abs(h_r - t_r) <= 1 and abs(h_c - t_c) <= 1):
         if h_c > t_c:
             t_c += 1
         elif h_c < t_c:
@@ -36,7 +35,6 @@ def follow(head, tail):
             t_r += 1
         elif h_r < t_r:
             t_r -= 1
-
     return (t_r, t_c)
 
 
