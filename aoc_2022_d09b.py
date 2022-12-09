@@ -102,7 +102,7 @@ def solve1(lines):
 def solve2(lines):
     res = 0
     D = set()
-    # first is head
+    # first is head, then 9 knots
     T = [(0, 0) for i in range(10)]
     D.add(T[-1])
     for line in lines:
