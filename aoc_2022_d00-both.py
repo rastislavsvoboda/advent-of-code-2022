@@ -11,7 +11,7 @@ CEND = '\033[0m'
 
 start = datetime.now()
 lines_sample = open('0.ex1').readlines()
-lines = open('0.in').readlines()
+lines_puzzle = open('0.in').readlines()
 # text = open('0.in').read()
 
 
