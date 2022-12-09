@@ -21,19 +21,18 @@ def move(head, direction):
     return (h_r + d_r, h_c + d_c)
 
 
+def sign(x):
+    return -1 if x < 0 else 1 if x > 0 else 0
+
+
 def follow(head, tail):
     h_r, h_c = head
     t_r, t_c = tail
+    d_r, d_c = h_r - t_r, h_c - t_c
 
-    if not (abs(h_r - t_r) <= 1 and abs(h_c - t_c) <= 1):
-        if h_c > t_c:
-            t_c += 1
-        elif h_c < t_c:
-            t_c -= 1
-        if h_r > t_r:
-            t_r += 1
-        elif h_r < t_r:
-            t_r -= 1
+    if abs(d_r) > 1 or abs(d_c) > 1:
+        t_r += sign(d_r)
+        t_c += sign(d_c)
 
     return (t_r, t_c)
 
