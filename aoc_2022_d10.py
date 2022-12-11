@@ -75,8 +75,8 @@ def solve2(lines):
 
 print(CRED + "sample:", solve1(lines_sample), CEND)  # 13140
 print(CGRN + "puzzle:", solve1(lines_puzzle), CEND)  # 14060
-# print(CRED + "sample:", solve2(lines_sample), CEND)  #
-# print(CGRN + "puzzle:", solve2(lines_puzzle), CEND)  # PAPKFKEJ
+print(CRED + "sample:", solve2(lines_sample), CEND)  #
+print(CGRN + "puzzle:", solve2(lines_puzzle), CEND)  # PAPKFKEJ
 
 
 stop = datetime.now()
