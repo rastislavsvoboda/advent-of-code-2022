@@ -15,6 +15,7 @@ DC = [0, 1, 0, -1]
 
 
 def solve(lines, part):
+    res = None
     G = []
     S = []
     e = (None, None)
@@ -44,32 +45,30 @@ def solve(lines, part):
     R = len(G)
     C = len(G[0])
 
-    RES = []
+    q = deque()
     for s in S:
-        q = deque()
         q.append((0, s))
-        seen = set()
-        while len(q):
-            l, pos = q.popleft()
+    seen = set()
+    while len(q):
+        l, pos = q.popleft()
 
-            if pos == e:
-                RES.append(l)
-                break
+        if pos == e:
+            res = l
+            break
 
-            if pos in seen:
-                continue
-            seen.add(pos)
+        if pos in seen:
+            continue
 
-            r, c = pos
-            elev = G[r][c]
-            for i in range(4):
-                rr = r + DR[i]
-                cc = c + DC[i]
-                if 0 <= rr < R and 0 <= cc < C:
-                    if ord(G[rr][cc]) - ord(elev) <= 1:
-                        q.append((l+1, (rr, cc)))
+        seen.add(pos)
+        r, c = pos
+        elev = G[r][c]
+        for i in range(4):
+            rr = r + DR[i]
+            cc = c + DC[i]
+            if 0 <= rr < R and 0 <= cc < C:
+                if ord(G[rr][cc]) - ord(elev) <= 1:
+                    q.append((l+1, (rr, cc)))
 
-    res = sorted(RES)[0]
     return res
 
 
