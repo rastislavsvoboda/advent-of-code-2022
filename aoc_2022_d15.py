@@ -95,7 +95,7 @@ def solve2(lines, limit):
 
     for x in range(X1, X2+1):
         # if x % 10000 == 0:
-        #     print(xx)
+        #     print(x)
         
         R = [] # ranges where S is in reach od line x
         for i, s in enumerate(S):
@@ -103,7 +103,7 @@ def solve2(lines, limit):
             dx = abs(s[0] - x)
             dy = d - dx
             if (dy >= 0):
-                # S is in range of line xx, compute boundaries 
+                # S is in range of line x, compute boundaries 
                 r1 = max(s[1] - dy, Y1)
                 r2 = min(s[1] + dy, Y2)
                 R.append((r1, r2))
