@@ -1,6 +1,5 @@
 from datetime import datetime
 import re
-from functools import cmp_to_key
 
 CRED = '\033[91m'
 CGRN = '\033[92m'
