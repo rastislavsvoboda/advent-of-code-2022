@@ -50,36 +50,17 @@ def solve(lines, part):
             i = B.index((j, a))
             if a == 0:
                 continue
-            if a > 0:
-                aa = a % (L-1)
-                if aa == 0:
-                    continue
-                if i == 0:
-                    p3 = B[i+1:]
-                elif i == L-1:
-                    p3 = B[:-1]
-                else:
-                    p1 = B[i+1:]
-                    p2 = B[:i]
-                    p3 = p1 + p2
-                p4 = p3[:aa]
-                p5 = p3[aa:]
-                B = p4 + [(j, a)] + p5
-            else:
-                aa = -a % (L-1)
-                if aa == 0:
-                    continue
-                if i == 0:
-                    p3 = B[i+1:]
-                elif i == L-1:
-                    p3 = B[:-1]
-                else:
-                    p1 = B[i+1:]
-                    p2 = B[:i]
-                    p3 = p1 + p2
-                p4 = p3[:-aa]
-                p5 = p3[-aa:]
-                B = p4 + [(j, a)] + p5
+            # cut at item and swap, so item is virtually first/last            
+            p_left = B[:i]
+            p_right = B[i+1:]
+            p_joined = p_right + p_left
+            aa = a % (L-1)
+            if aa == 0:
+                continue          
+            # cut and stick item in place  
+            p_left = p_joined[:aa]
+            p_right = p_joined[aa:]
+            B = p_left + [(j, a)] + p_right
 
     res = find_zero(B, zero_i)
 
