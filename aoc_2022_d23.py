@@ -119,15 +119,16 @@ def solve2(lines):
     while True:
         suggested = consider_moves(G)
 
-        if len(suggested) == 0:
-            # none moved
-            break
-
+        moved = False
         for pos in suggested.keys():
             if len(suggested[pos]) == 1:
+                moved = True
                 old_pos, d = suggested[pos][0]
                 G.pop(old_pos)
                 G[pos] = d
+
+        if not moved:
+            break
 
         for pos in G.keys():
             G[pos] = (G[pos]+1) % 4
