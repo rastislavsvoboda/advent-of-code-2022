@@ -72,30 +72,33 @@ def get_time(G, R, C, B, memo, start_pos, end_pos, start_time):
 
         r, c = pos
 
-        # stay at (r,c)
-        candidate_next_positions = [(r,c)]
+        new_bliz = get_bliz_at(R, C, B, time+1, memo)
 
-        # move to (rr,cc)
         for d in DIRS:
             rr = r+d[0]
             cc = c+d[1]
             if 0 <= rr < R and 0 <= cc < C:
                 if G[rr][cc] == "#":
                     continue
-                candidate_next_positions.append((rr, cc))
+                has_bliz_at_pos = False
+                for (b_pos, b_dir) in new_bliz:
+                    if (rr, cc) == b_pos:
+                        has_bliz_at_pos = True
+                        break
+                if has_bliz_at_pos:
+                    continue
 
-        new_bliz = get_bliz_at(R, C, B, time+1, memo)
+                q.append((time+1, (rr, cc)))
 
-        for (rr, cc) in candidate_next_positions:
-            has_bliz_at_pos = False
-            for (b_pos, b_dir) in new_bliz:
-                if (rr, cc) == b_pos:
-                    has_bliz_at_pos = True
-                    break
-            if has_bliz_at_pos:
-                continue
+        has_bliz_at_pos = False
+        for (b_pos, b_dir) in new_bliz:
+            if (r, c) == b_pos:
+                has_bliz_at_pos = True
+                break
+        if has_bliz_at_pos:
+            continue
 
-            q.append((time+1, (rr, cc)))
+        q.append((time+1, (r, c)))
 
     return res
 
@@ -132,6 +135,9 @@ def solve(lines):
     time = get_time(G, R, C, B, memo, end_p, start_p, time)
     time = get_time(G, R, C, B, memo, start_p, end_p, time)
     res2 = time
+
+    # print("memo len:", len(memo))
+
     return res1, res2
 
 

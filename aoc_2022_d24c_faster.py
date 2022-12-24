@@ -71,7 +71,8 @@ def get_bliz(R, C, bliz):
     for p in range(1, period):
         memo[p] = move_bliz(R, C, memo[p-1])
 
-    print("memo len:", len(memo))
+    # print("memo len:", len(memo))
+
     return lambda t: memo[t % period]
 
 
