@@ -13,6 +13,16 @@ lines_puzzle = open('24.in').readlines()
 DIRS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 
+def gcd(x, y):
+    while(y):
+        x, y = y, x % y
+    return x
+
+
+def lcm(x, y):
+    return (x*y)//gcd(x, y)
+
+
 def move_bliz(R, C, bliz):
     new_bliz = []
     for b in bliz:
@@ -34,6 +44,7 @@ def move_bliz(R, C, bliz):
 
 def get_bliz_at(R, C, bliz, t, memo):
     init_bliz = bliz
+    period = lcm(R-2, C-2)
 
     def dp(t):
         if t == 0:
@@ -51,7 +62,20 @@ def get_bliz_at(R, C, bliz, t, memo):
     return dp(t)
 
 
-def get_time(G, R, C, B, memo, start_pos, end_pos, start_time):
+def get_bliz(R, C, bliz):
+    init_bliz = bliz
+    period = lcm(R-2, C-2)
+    memo = {}
+    memo[0] = init_bliz
+
+    for p in range(1, period):
+        memo[p] = move_bliz(R, C, memo[p-1])
+
+    print("memo len:", len(memo))
+    return lambda t: memo[t % period]
+
+
+def get_time(G, R, C, get_bliz_at_fn, start_pos, end_pos, start_time):
     res = None
     q = deque()
     q.append((start_time, start_pos))
@@ -71,31 +95,34 @@ def get_time(G, R, C, B, memo, start_pos, end_pos, start_time):
             break
 
         r, c = pos
+        
+        new_bliz = get_bliz_at_fn(time+1)
 
-        # stay at (r,c)
-        candidate_next_positions = [(r,c)]
-
-        # move to (rr,cc)
         for d in DIRS:
             rr = r+d[0]
             cc = c+d[1]
             if 0 <= rr < R and 0 <= cc < C:
                 if G[rr][cc] == "#":
                     continue
-                candidate_next_positions.append((rr, cc))
+                has_bliz_at_pos = False
+                for (b_pos, b_dir) in new_bliz:
+                    if (rr, cc) == b_pos:
+                        has_bliz_at_pos = True
+                        break
+                if has_bliz_at_pos:
+                    continue
 
-        new_bliz = get_bliz_at(R, C, B, time+1, memo)
+                q.append((time+1, (rr, cc)))
 
-        for (rr, cc) in candidate_next_positions:
-            has_bliz_at_pos = False
-            for (b_pos, b_dir) in new_bliz:
-                if (rr, cc) == b_pos:
-                    has_bliz_at_pos = True
-                    break
-            if has_bliz_at_pos:
-                continue
+        has_bliz_at_pos = False
+        for (b_pos, b_dir) in new_bliz:
+            if (r, c) == b_pos:
+                has_bliz_at_pos = True
+                break
+        if has_bliz_at_pos:
+            continue
 
-            q.append((time+1, (rr, cc)))
+        q.append((time+1, (r, c)))
 
     return res
 
@@ -127,11 +154,14 @@ def solve(lines):
     start_p = (0, start_c)
     end_p = (R-1, end_c)
 
-    time = get_time(G, R, C, B, memo, start_p, end_p, 0)
+    get_bliz_at_fn = get_bliz(R, C, B)
+
+    time = get_time(G, R, C, get_bliz_at_fn, start_p, end_p, 0)
     res1 = time
-    time = get_time(G, R, C, B, memo, end_p, start_p, time)
-    time = get_time(G, R, C, B, memo, start_p, end_p, time)
+    time = get_time(G, R, C, get_bliz_at_fn, end_p, start_p, time)
+    time = get_time(G, R, C, get_bliz_at_fn, start_p, end_p, time)
     res2 = time
+
     return res1, res2
 
 
