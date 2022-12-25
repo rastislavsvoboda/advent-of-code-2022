@@ -440,7 +440,7 @@ def step(r, c, d, sectors, QQ, get_descriptor_fn):
 
 
 def move(G, r, c, d, i, sectors, QQ, get_descriptor_fn):
-    while(i > 0):
+    while i > 0:
         r2, c2, d2 = step(r, c, d, sectors, QQ, get_descriptor_fn)
 
         if can_move_to(G, r2, c2):
