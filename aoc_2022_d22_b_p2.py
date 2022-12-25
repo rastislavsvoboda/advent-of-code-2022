@@ -143,11 +143,15 @@ def solve1(lines, type, is_test):
 
 
 def test2_sample(G, move_fn, sectors, QQ, get_descriptor_fn):
-    assert (8, 14, 1) == move_fn(G, 5, 11, 0, 1, sectors, QQ, get_descriptor_fn)
-    assert (5, 11, 2) == move_fn(G, 8, 14, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (8, 14, 1) == move_fn(G, 5, 11, 0,
+                                 1, sectors, QQ, get_descriptor_fn)
+    assert (5, 11, 2) == move_fn(G, 8, 14, 3,
+                                 1, sectors, QQ, get_descriptor_fn)
 
-    assert (7, 1, 3) == move_fn(G, 11, 10, 1, 1, sectors, QQ, get_descriptor_fn)
-    assert (11, 10, 3) == move_fn(G, 7, 1, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 1, 3) == move_fn(G, 11, 10, 1,
+                                1, sectors, QQ, get_descriptor_fn)
+    assert (11, 10, 3) == move_fn(
+        G, 7, 1, 1, 1, sectors, QQ, get_descriptor_fn)
 
     assert (4, 4, 1) == move_fn(G, 0, 8, 2, 1, sectors, QQ, get_descriptor_fn)
     assert (0, 8, 0) == move_fn(G, 4, 4, 3, 1, sectors, QQ, get_descriptor_fn)
@@ -155,8 +159,10 @@ def test2_sample(G, move_fn, sectors, QQ, get_descriptor_fn):
     assert (4, 3, 1) == move_fn(G, 0, 8, 3, 1, sectors, QQ, get_descriptor_fn)
     assert (0, 8, 1) == move_fn(G, 4, 3, 3, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (11, 15, 2) == move_fn(G, 0, 11, 0, 1, sectors, QQ, get_descriptor_fn)
-    assert (0, 11, 2) == move_fn(G, 11, 15, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (11, 15, 2) == move_fn(G, 0, 11, 0,
+                                  1, sectors, QQ, get_descriptor_fn)
+    assert (0, 11, 2) == move_fn(G, 11, 15, 0,
+                                 1, sectors, QQ, get_descriptor_fn)
 
     assert (4, 0, 1) == move_fn(G, 0, 11, 3, 1, sectors, QQ, get_descriptor_fn)
     assert (0, 11, 1) == move_fn(G, 4, 0, 3, 1, sectors, QQ, get_descriptor_fn)
@@ -164,17 +170,25 @@ def test2_sample(G, move_fn, sectors, QQ, get_descriptor_fn):
     assert (4, 7, 1) == move_fn(G, 3, 8, 2, 1, sectors, QQ, get_descriptor_fn)
     assert (3, 8, 0) == move_fn(G, 4, 7, 3, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (8, 15, 2) == move_fn(G, 3, 11, 0, 1, sectors, QQ, get_descriptor_fn)
-    assert (3, 11, 2) == move_fn(G, 8, 15, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (8, 15, 2) == move_fn(G, 3, 11, 0,
+                                 1, sectors, QQ, get_descriptor_fn)
+    assert (3, 11, 2) == move_fn(G, 8, 15, 0,
+                                 1, sectors, QQ, get_descriptor_fn)
 
-    assert (8, 15, 1) == move_fn(G, 4, 11, 0, 1, sectors, QQ, get_descriptor_fn)
-    assert (4, 11, 2) == move_fn(G, 8, 15, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (8, 15, 1) == move_fn(G, 4, 11, 0,
+                                 1, sectors, QQ, get_descriptor_fn)
+    assert (4, 11, 2) == move_fn(G, 8, 15, 3,
+                                 1, sectors, QQ, get_descriptor_fn)
 
-    assert (11, 12, 3) == move_fn(G, 7, 0, 2, 1, sectors, QQ, get_descriptor_fn)
-    assert (7, 0, 0) == move_fn(G, 11, 12, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (11, 12, 3) == move_fn(
+        G, 7, 0, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 0, 0) == move_fn(G, 11, 12, 1,
+                                1, sectors, QQ, get_descriptor_fn)
 
-    assert (11, 11, 3) == move_fn(G, 7, 0, 1, 1, sectors, QQ, get_descriptor_fn)
-    assert (7, 0, 3) == move_fn(G, 11, 11, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (11, 11, 3) == move_fn(
+        G, 7, 0, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 0, 3) == move_fn(G, 11, 11, 1,
+                                1, sectors, QQ, get_descriptor_fn)
 
     assert (11, 8, 3) == move_fn(G, 7, 3, 1, 1, sectors, QQ, get_descriptor_fn)
     assert (7, 3, 3) == move_fn(G, 11, 8, 1, 1, sectors, QQ, get_descriptor_fn)
@@ -185,8 +199,10 @@ def test2_sample(G, move_fn, sectors, QQ, get_descriptor_fn):
     assert (8, 8, 0) == move_fn(G, 7, 7, 1, 1, sectors, QQ, get_descriptor_fn)
     assert (7, 7, 3) == move_fn(G, 8, 8, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (8, 12, 1) == move_fn(G, 7, 11, 0, 1, sectors, QQ, get_descriptor_fn)
-    assert (7, 11, 2) == move_fn(G, 8, 12, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (8, 12, 1) == move_fn(G, 7, 11, 0,
+                                 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 11, 2) == move_fn(G, 8, 12, 3,
+                                 1, sectors, QQ, get_descriptor_fn)
 
     assert (5, 4, 0) == move_fn(G, 5, 3, 0, 1, sectors, QQ, get_descriptor_fn)
     assert (5, 3, 2) == move_fn(G, 5, 4, 2, 1, sectors, QQ, get_descriptor_fn)
@@ -197,50 +213,79 @@ def test2_sample(G, move_fn, sectors, QQ, get_descriptor_fn):
 
 def test2_puzzle(G, move_fn, sectors, QQ, get_descriptor_fn):
     # PUZZLE
-    assert (150, 0, 0) == move_fn(G, 0, 50, 3, 1, sectors, QQ, get_descriptor_fn)
-    assert (0, 50, 1) == move_fn(G, 150, 0, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (150, 0, 0) == move_fn(G, 0, 50, 3,
+                                  1, sectors, QQ, get_descriptor_fn)
+    assert (0, 50, 1) == move_fn(G, 150, 0, 2,
+                                 1, sectors, QQ, get_descriptor_fn)
 
-    assert (199, 0, 0) == move_fn(G, 0, 99, 3, 1, sectors, QQ, get_descriptor_fn)
-    assert (0, 99, 1) == move_fn(G, 199, 0, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (199, 0, 0) == move_fn(G, 0, 99, 3,
+                                  1, sectors, QQ, get_descriptor_fn)
+    assert (0, 99, 1) == move_fn(G, 199, 0, 2,
+                                 1, sectors, QQ, get_descriptor_fn)
 
-    assert (199, 0, 3) == move_fn(G, 0, 100, 3, 1, sectors, QQ, get_descriptor_fn)
-    assert (0, 100, 1) == move_fn(G, 199, 0, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (199, 0, 3) == move_fn(G, 0, 100, 3,
+                                  1, sectors, QQ, get_descriptor_fn)
+    assert (0, 100, 1) == move_fn(G, 199, 0, 1,
+                                  1, sectors, QQ, get_descriptor_fn)
 
-    assert (199, 49, 3) == move_fn(G, 0, 149, 3, 1, sectors, QQ, get_descriptor_fn)
-    assert (0, 149, 1) == move_fn(G, 199, 49, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (199, 49, 3) == move_fn(
+        G, 0, 149, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 149, 1) == move_fn(G, 199, 49, 1,
+                                  1, sectors, QQ, get_descriptor_fn)
 
-    assert (149, 99, 2) == move_fn(G, 0, 149, 0, 1, sectors, QQ, get_descriptor_fn)
-    assert (0, 149, 2) == move_fn(G, 149, 99, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (149, 99, 2) == move_fn(
+        G, 0, 149, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 149, 2) == move_fn(G, 149, 99, 0,
+                                  1, sectors, QQ, get_descriptor_fn)
 
-    assert (150, 49, 2) == move_fn(G, 149, 50, 1, 1, sectors, QQ, get_descriptor_fn)
-    assert (149, 50, 3) == move_fn(G, 150, 49, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (150, 49, 2) == move_fn(
+        G, 149, 50, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (149, 50, 3) == move_fn(
+        G, 150, 49, 0, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (50, 50, 0) == move_fn(G, 100, 0, 3, 1, sectors, QQ, get_descriptor_fn)
-    assert (100, 0, 1) == move_fn(G, 50, 50, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (50, 50, 0) == move_fn(G, 100, 0, 3,
+                                  1, sectors, QQ, get_descriptor_fn)
+    assert (100, 0, 1) == move_fn(G, 50, 50, 2,
+                                  1, sectors, QQ, get_descriptor_fn)
 
-    assert (99, 50, 0) == move_fn(G, 100, 49, 3, 1, sectors, QQ, get_descriptor_fn)
-    assert (100, 49, 1) == move_fn(G, 99, 50, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (99, 50, 0) == move_fn(G, 100, 49, 3,
+                                  1, sectors, QQ, get_descriptor_fn)
+    assert (100, 49, 1) == move_fn(
+        G, 99, 50, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (49, 149, 2) == move_fn(G, 100, 99, 0, 1, sectors, QQ, get_descriptor_fn)
-    assert (100, 99, 2) == move_fn(G, 49, 149, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (49, 149, 2) == move_fn(
+        G, 100, 99, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (100, 99, 2) == move_fn(
+        G, 49, 149, 0, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (149, 0, 0) == move_fn(G, 0, 50, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (149, 0, 0) == move_fn(G, 0, 50, 2,
+                                  1, sectors, QQ, get_descriptor_fn)
 
-    assert (100, 0, 0) == move_fn(G, 49, 50, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (100, 0, 0) == move_fn(G, 49, 50, 2,
+                                  1, sectors, QQ, get_descriptor_fn)
 
-    assert (100, 49, 1) == move_fn(G, 99, 50, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (100, 49, 1) == move_fn(
+        G, 99, 50, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (49, 50, 0) == move_fn(G, 100, 0, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (49, 50, 0) == move_fn(G, 100, 0, 2,
+                                  1, sectors, QQ, get_descriptor_fn)
 
-    assert (0, 50, 0) == move_fn(G, 149, 0, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 50, 0) == move_fn(G, 149, 0, 2,
+                                 1, sectors, QQ, get_descriptor_fn)
 
-    assert (0, 50, 1) == move_fn(G, 150, 0, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 50, 1) == move_fn(G, 150, 0, 2,
+                                 1, sectors, QQ, get_descriptor_fn)
 
-    assert (0, 149, 1) == move_fn(G, 199, 49, 1, 1, sectors, QQ, get_descriptor_fn)
-    assert (150, 49, 2) == move_fn(G, 149, 50, 1, 1, sectors, QQ, get_descriptor_fn)
-    assert (199, 49, 2) == move_fn(G, 149, 99, 1, 1, sectors, QQ, get_descriptor_fn)
-    assert (50, 99, 2) == move_fn(G, 49, 100, 1, 1, sectors, QQ, get_descriptor_fn)
-    assert (99, 99, 2) == move_fn(G, 49, 149, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 149, 1) == move_fn(G, 199, 49, 1,
+                                  1, sectors, QQ, get_descriptor_fn)
+    assert (150, 49, 2) == move_fn(
+        G, 149, 50, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (199, 49, 2) == move_fn(
+        G, 149, 99, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (50, 99, 2) == move_fn(G, 49, 100, 1,
+                                  1, sectors, QQ, get_descriptor_fn)
+    assert (99, 99, 2) == move_fn(G, 49, 149, 1,
+                                  1, sectors, QQ, get_descriptor_fn)
 
 
 def get_cube_type(R, C):
@@ -581,23 +626,22 @@ def solve2(lines, type, is_test):
 
             test2_sample(G, move, sectors, QQ, get_descriptor_sample)
         else:
-
             test2_puzzle(G, move, sectors, QQ, get_descriptor_puzzle)
+
         return None
     else:
         for i in I:
-            # move
             if i == "L":
+                # turn left
                 d = (d+4-1) % 4
             elif i == "R":
+                # turn right
                 d = (d+1) % 4
             else:
+                # move
                 assert isinstance(i, int)
-
-                if is_sample:
-                    r, c, d = move(G, r, c, d, i, sectors, QQ, get_descriptor_sample)
-                else:
-                    r, c, d = move(G, r, c, d, i, sectors, QQ, get_descriptor_puzzle)
+                get_descriptor_fn = get_descriptor_sample if is_sample else get_descriptor_puzzle
+                r, c, d = move(G, r, c, d, i, sectors, QQ, get_descriptor_fn)
 
         # print(r+1, c+1, d)
         res = 1000*(r+1) + 4 * (c+1) + d
