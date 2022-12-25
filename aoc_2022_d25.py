@@ -12,62 +12,55 @@ lines_puzzle = open('25.in').readlines()
 
 def parse_SNAFU(s):
     num = 0
-    for i, ch in enumerate(reversed(s)):
-        x = 0
+    for i, ch in enumerate(reversed(s.strip())):
+        n = 0
         if ch == "0":
-            x = 0
+            n = 0
         elif ch == "1":
-            x = 1
+            n = 1
         elif ch == "2":
-            x = 2
+            n = 2
         elif ch == "-":
-            x = -1
+            n = -1
         elif ch == "=":
-            x = -2
+            n = -2
         else:
-            assert False
-        num += x * pow(5, i)
+            assert False, "incorrect character"
+        num += n * pow(5, i)
     return num
 
 
 def generate_SNAFU(num):
-    d = 5
     s = ""
-    x = num
     while True:
-        x = num // d
-        y = num % d
+        div = num // 5
+        mod = num % 5
 
-        if y == 0:
+        if mod == 0:
             s += "0"
-        elif y == 1:
+        elif mod == 1:
             s += "1"
-        elif y == 2:
+        elif mod == 2:
             s += "2"
-        elif y == 3:
+        elif mod == 3:
             s += "="
-            x += 1
-        elif y == 4:
+            div += 1
+        elif mod == 4:
             s += "-"
-            x += 1
-        else:
-            assert False
+            div += 1
 
-        if x == 0:
+        if div == 0:
             break
-        num = x
+        
+        num = div
 
     return s[::-1]
 
 
 def solve1(lines):
-    sum = 0
-    for line in lines:
-        line = line.strip()
-        sum += parse_SNAFU(line)
-
-    res = generate_SNAFU(sum)
-
+    total = sum(map(parse_SNAFU, lines))
+    res = generate_SNAFU(total)
+    assert parse_SNAFU(res) == total
     return res
 
 
