@@ -142,402 +142,105 @@ def solve1(lines, type, is_test):
     return res
 
 
-def move2_sample(G, R, C, r, c, d, i):
-    Q = R // 3
-    assert C // 4 == Q
+def test2_sample(G, move_fn, sectors, QQ, get_descriptor_fn):
+    assert (8, 14, 1) == move_fn(G, 5, 11, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (5, 11, 2) == move_fn(G, 8, 14, 3, 1, sectors, QQ, get_descriptor_fn)
 
-    qr = r // Q
-    qc = c // Q
-    assert (qr, qc) in [(0, 2), (1, 0), (1, 1), (1, 2), (2, 2), (2, 3)]
+    assert (7, 1, 3) == move_fn(G, 11, 10, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (11, 10, 3) == move_fn(G, 7, 1, 1, 1, sectors, QQ, get_descriptor_fn)
 
-    pos = r, c, d
-    while i > 0:
-        rr, cc, dd = pos
-        if dd == 1:
-            # DOWN
-            r += 1
-            if (r, c) not in G:
-                if (qr, qc) == (1, 0):
-                    r = 3 * Q - 1
-                    c = (3 * Q - 1) - (cc % Q)
-                    d = 3
-                elif (qr, qc) == (1, 1):
-                    c = 2 * Q
-                    r = (3 * Q - 1) - (cc % Q)
-                    d = 0
-                elif (qr, qc) == (2, 2):
-                    r = 2 * Q - 1
-                    c = (1 * Q - 1) - (cc % Q)
-                    d = 3
-                elif (qr, qc) == (2, 3):
-                    c = 0 * Q
-                    r = (2 * Q - 1) - (cc % Q)
-                    d = 0
-                else:
-                    assert False
-            assert (r, c) in G
-            if G[(r, c)] == "#":
-                break
-            pos = r, c, d
-        elif dd == 3:
-            # UP
-            r -= 1
-            if (r, c) not in G:
-                if (qr, qc) == (1, 0):
-                    r = 0 * Q
-                    c = (3 * Q - 1) - (cc % Q)
-                    d = 1
-                elif (qr, qc) == (1, 1):
-                    c = 2 * Q
-                    r = (0 * Q) + (cc % Q)
-                    d = 0
-                elif (qr, qc) == (0, 2):
-                    r = 1 * Q
-                    c = (1 * Q - 1) - (cc % Q)
-                    d = 1
-                elif (qr, qc) == (2, 3):
-                    c = 3 * Q - 1
-                    r = (2 * Q - 1) - (cc % Q)
-                    d = 2
-                else:
-                    assert False
-            assert (r, c) in G
-            if G[(r, c)] == "#":
-                break
-            pos = r, c, d
-        elif dd == 0:
-            # RIGHT
-            c += 1
-            if (r, c) not in G:
-                if (qr, qc) == (0, 2):
-                    c = 4 * Q - 1
-                    r = (3 * Q - 1) - (rr % Q)
-                    d = 2
-                elif (qr, qc) == (1, 2):
-                    r = 2 * Q
-                    c = (4 * Q - 1) - (rr % Q)
-                    d = 1
-                elif (qr, qc) == (2, 3):
-                    c = 3 * Q - 1
-                    r = (1 * Q - 1) - (rr % Q)
-                    d = 2
-                else:
-                    assert False
-            assert (r, c) in G
-            if G[(r, c)] == "#":
-                break
-            pos = r, c, d
-        elif dd == 2:
-            # LEFT
-            c -= 1
-            if (r, c) not in G:
-                if (qr, qc) == (0, 2):
-                    r = 1 * Q
-                    c = (1 * Q) + (rr % Q)
-                    d = 1
-                elif (qr, qc) == (1, 0):
-                    r = 3 * Q - 1
-                    c = (4 * Q - 1) - (rr % Q)
-                    d = 3
-                elif (qr, qc) == (2, 2):
-                    r = 2 * Q - 1
-                    c = (2 * Q - 1) - (rr % Q)
-                    d = 3
-                else:
-                    assert False
-            assert (r, c) in G
-            if G[(r, c)] == "#":
-                break
-            pos = r, c, d
-        i -= 1
-    return pos
+    assert (4, 4, 1) == move_fn(G, 0, 8, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 8, 0) == move_fn(G, 4, 4, 3, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (4, 3, 1) == move_fn(G, 0, 8, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 8, 1) == move_fn(G, 4, 3, 3, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (11, 15, 2) == move_fn(G, 0, 11, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 11, 2) == move_fn(G, 11, 15, 0, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (4, 0, 1) == move_fn(G, 0, 11, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 11, 1) == move_fn(G, 4, 0, 3, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (4, 7, 1) == move_fn(G, 3, 8, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (3, 8, 0) == move_fn(G, 4, 7, 3, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (8, 15, 2) == move_fn(G, 3, 11, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (3, 11, 2) == move_fn(G, 8, 15, 0, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (8, 15, 1) == move_fn(G, 4, 11, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (4, 11, 2) == move_fn(G, 8, 15, 3, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (11, 12, 3) == move_fn(G, 7, 0, 2, 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 0, 0) == move_fn(G, 11, 12, 1, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (11, 11, 3) == move_fn(G, 7, 0, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 0, 3) == move_fn(G, 11, 11, 1, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (11, 8, 3) == move_fn(G, 7, 3, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 3, 3) == move_fn(G, 11, 8, 1, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (11, 8, 0) == move_fn(G, 7, 4, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 4, 3) == move_fn(G, 11, 8, 2, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (8, 8, 0) == move_fn(G, 7, 7, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 7, 3) == move_fn(G, 8, 8, 2, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (8, 12, 1) == move_fn(G, 7, 11, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (7, 11, 2) == move_fn(G, 8, 12, 3, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (5, 4, 0) == move_fn(G, 5, 3, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (5, 3, 2) == move_fn(G, 5, 4, 2, 1, sectors, QQ, get_descriptor_fn)
+
+    assert (3, 9, 3) == move_fn(G, 4, 9, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (4, 9, 1) == move_fn(G, 3, 9, 1, 1, sectors, QQ, get_descriptor_fn)
 
 
-def move2_puzzle(G, R, C, r, c, d, i):
-    Q = R // 4
-
-    assert C // 3 == Q
-
-    qr = r // Q
-    qc = c // Q
-    assert (qr, qc) in [(0, 1), (0, 2), (1, 1), (2, 0), (2, 1), (3, 0)]
-
-    pos = r, c, d
-    while i > 0:
-        rr, cc, dd = pos
-        if dd == 1:
-            # DOWN
-            r += 1
-            if (r, c) not in G:
-                if (qr, qc) == (3, 0):
-                    r = 0 * Q
-                    c = (2 * Q) + (cc % Q)
-                    d = 1
-                elif (qr, qc) == (2, 1):
-                    c = (1 * Q - 1)
-                    r = (3 * Q) + (cc % Q)
-                    d = 2
-                elif (qr, qc) == (0, 2):
-                    c = 2 * Q - 1
-                    r = (1 * Q) + (cc % Q)
-                    d = 2
-                else:
-                    assert False
-            assert (r, c) in G
-            if G[(r, c)] == "#":
-                break
-            pos = r, c, d
-        elif dd == 3:
-            # UP
-            r -= 1
-            if (r, c) not in G:
-                if (qr, qc) == (2, 0):
-                    c = 1 * Q
-                    r = (1 * Q) + (cc % Q)
-                    d = 0
-                elif (qr, qc) == (0, 1):
-                    c = 0 * Q
-                    r = (3 * Q) + (cc % Q)
-                    d = 0
-                elif (qr, qc) == (0, 2):
-                    r = (4 * Q - 1)
-                    c = (0 * Q) + (cc % Q)
-                    d = 3
-                else:
-                    assert False
-            assert (r, c) in G
-            if G[(r, c)] == "#":
-                break
-            pos = r, c, d
-        elif dd == 0:
-            # RIGHT
-            c += 1
-            if (r, c) not in G:
-                if (qr, qc) == (0, 2):
-                    c = (2 * Q - 1)
-                    r = (3 * Q - 1) - (rr % Q)
-                    d = 2
-                elif (qr, qc) == (1, 1):
-                    r = 1 * Q - 1
-                    c = (2 * Q) + (rr % Q)
-                    d = 3
-                elif (qr, qc) == (2, 1):
-                    c = 3 * Q - 1
-                    r = (1 * Q - 1) - (rr % Q)
-                    d = 2
-                elif (qr, qc) == (3, 0):
-                    r = 3 * Q - 1
-                    c = (1 * Q) + (rr % Q)
-                    d = 3
-                else:
-                    assert False
-            assert (r, c) in G
-            if G[(r, c)] == "#":
-                break
-            pos = r, c, d
-        elif dd == 2:
-            # LEFT
-            c -= 1
-            if (r, c) not in G:
-                if (qr, qc) == (0, 1):
-                    c = 0 * Q
-                    r = (3 * Q - 1) - (rr % Q)
-                    d = 0
-                elif (qr, qc) == (1, 1):
-                    r = 2 * Q
-                    c = (0 * Q) + (rr % Q)
-                    d = 1
-                elif (qr, qc) == (2, 0):
-                    c = 1 * Q
-                    r = (1 * Q - 1) - (rr % Q)
-                    d = 0
-                elif (qr, qc) == (3, 0):
-                    r = 0 * Q
-                    c = (1 * Q) + (rr % Q)
-                    d = 1
-                else:
-                    assert False
-            assert (r, c) in G
-            if G[(r, c)] == "#":
-                break
-            pos = r, c, d
-        i -= 1
-    return pos
-
-
-def test2_sample(G, R, C, move_fn):
-    assert (8, 14, 1) == move_fn(G, R, C, 5, 11, 0, 1)
-    assert (5, 11, 2) == move_fn(G, R, C, 8, 14, 3, 1)
-
-    assert (7, 1, 3) == move_fn(G, R, C, 11, 10, 1, 1)
-    assert (11, 10, 3) == move_fn(G, R, C, 7, 1, 1, 1)
-
-    assert (4, 4, 1) == move_fn(G, R, C, 0, 8, 2, 1)
-    assert (0, 8, 0) == move_fn(G, R, C, 4, 4, 3, 1)
-
-    assert (4, 3, 1) == move_fn(G, R, C, 0, 8, 3, 1)
-    assert (0, 8, 1) == move_fn(G, R, C, 4, 3, 3, 1)
-
-    assert (11, 15, 2) == move_fn(G, R, C, 0, 11, 0, 1)
-    assert (0, 11, 2) == move_fn(G, R, C, 11, 15, 0, 1)
-
-    assert (4, 0, 1) == move_fn(G, R, C, 0, 11, 3, 1)
-    assert (0, 11, 1) == move_fn(G, R, C, 4, 0, 3, 1)
-
-    assert (4, 7, 1) == move_fn(G, R, C, 3, 8, 2, 1)
-    assert (3, 8, 0) == move_fn(G, R, C, 4, 7, 3, 1)
-
-    assert (8, 15, 2) == move_fn(G, R, C, 3, 11, 0, 1)
-    assert (3, 11, 2) == move_fn(G, R, C, 8, 15, 0, 1)
-
-    assert (8, 15, 1) == move_fn(G, R, C, 4, 11, 0, 1)
-    assert (4, 11, 2) == move_fn(G, R, C, 8, 15, 3, 1)
-
-    assert (11, 12, 3) == move_fn(G, R, C, 7, 0, 2, 1)
-    assert (7, 0, 0) == move_fn(G, R, C, 11, 12, 1, 1)
-
-    assert (11, 11, 3) == move_fn(G, R, C, 7, 0, 1, 1)
-    assert (7, 0, 3) == move_fn(G, R, C, 11, 11, 1, 1)
-
-    assert (11, 8, 3) == move_fn(G, R, C, 7, 3, 1, 1)
-    assert (7, 3, 3) == move_fn(G, R, C, 11, 8, 1, 1)
-
-    assert (11, 8, 0) == move_fn(G, R, C, 7, 4, 1, 1)
-    assert (7, 4, 3) == move_fn(G, R, C, 11, 8, 2, 1)
-
-    assert (8, 8, 0) == move_fn(G, R, C, 7, 7, 1, 1)
-    assert (7, 7, 3) == move_fn(G, R, C, 8, 8, 2, 1)
-
-    assert (8, 12, 1) == move_fn(G, R, C, 7, 11, 0, 1)
-    assert (7, 11, 2) == move_fn(G, R, C, 8, 12, 3, 1)
-
-
-def test2_puzzle(G, R, C, move_fn, sectors, QQ):
+def test2_puzzle(G, move_fn, sectors, QQ, get_descriptor_fn):
     # PUZZLE
-    assert (150, 0, 0) == move_fn(G, R, C, 0, 50, 3, 1, sectors, QQ)
-    assert (0, 50, 1) == move_fn(G, R, C, 150, 0, 2, 1, sectors, QQ)
+    assert (150, 0, 0) == move_fn(G, 0, 50, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 50, 1) == move_fn(G, 150, 0, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (199, 0, 0) == move_fn(G, R, C, 0, 99, 3, 1, sectors, QQ)
-    assert (0, 99, 1) == move_fn(G, R, C, 199, 0, 2, 1, sectors, QQ)
+    assert (199, 0, 0) == move_fn(G, 0, 99, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 99, 1) == move_fn(G, 199, 0, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (199, 0, 3) == move_fn(G, R, C, 0, 100, 3, 1, sectors, QQ)
-    assert (0, 100, 1) == move_fn(G, R, C, 199, 0, 1, 1, sectors, QQ)
+    assert (199, 0, 3) == move_fn(G, 0, 100, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 100, 1) == move_fn(G, 199, 0, 1, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (199, 49, 3) == move_fn(G, R, C, 0, 149, 3, 1, sectors, QQ)
-    assert (0, 149, 1) == move_fn(G, R, C, 199, 49, 1, 1, sectors, QQ)
+    assert (199, 49, 3) == move_fn(G, 0, 149, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 149, 1) == move_fn(G, 199, 49, 1, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (149, 99, 2) == move_fn(G, R, C, 0, 149, 0, 1, sectors, QQ)
-    assert (0, 149, 2) == move_fn(G, R, C, 149, 99, 0, 1, sectors, QQ)
+    assert (149, 99, 2) == move_fn(G, 0, 149, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (0, 149, 2) == move_fn(G, 149, 99, 0, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (150, 49, 2) == move_fn(G, R, C, 149, 50, 1, 1, sectors, QQ)
-    assert (149, 50, 3) == move_fn(G, R, C, 150, 49, 0, 1, sectors, QQ)
+    assert (150, 49, 2) == move_fn(G, 149, 50, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (149, 50, 3) == move_fn(G, 150, 49, 0, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (50, 50, 0) == move_fn(G, R, C, 100, 0, 3, 1, sectors, QQ)
-    assert (100, 0, 1) == move_fn(G, R, C, 50, 50, 2, 1, sectors, QQ)
+    assert (50, 50, 0) == move_fn(G, 100, 0, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (100, 0, 1) == move_fn(G, 50, 50, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (99, 50, 0) == move_fn(G, R, C, 100, 49, 3, 1, sectors, QQ)
-    assert (100, 49, 1) == move_fn(G, R, C, 99, 50, 2, 1, sectors, QQ)
+    assert (99, 50, 0) == move_fn(G, 100, 49, 3, 1, sectors, QQ, get_descriptor_fn)
+    assert (100, 49, 1) == move_fn(G, 99, 50, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (49, 149, 2) == move_fn(G, R, C, 100, 99, 0, 1, sectors, QQ)
-    assert (100, 99, 2) == move_fn(G, R, C, 49, 149, 0, 1, sectors, QQ)
+    assert (49, 149, 2) == move_fn(G, 100, 99, 0, 1, sectors, QQ, get_descriptor_fn)
+    assert (100, 99, 2) == move_fn(G, 49, 149, 0, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (149, 0, 0) == move_fn(G, R, C, 0, 50, 2, 1, sectors, QQ)
+    assert (149, 0, 0) == move_fn(G, 0, 50, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (100, 0, 0) == move_fn(G, R, C, 49, 50, 2, 1, sectors, QQ)
+    assert (100, 0, 0) == move_fn(G, 49, 50, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (100, 49, 1) == move_fn(G, R, C, 99, 50, 2, 1, sectors, QQ)
+    assert (100, 49, 1) == move_fn(G, 99, 50, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (49, 50, 0) == move_fn(G, R, C, 100, 0, 2, 1, sectors, QQ)
+    assert (49, 50, 0) == move_fn(G, 100, 0, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (0, 50, 0) == move_fn(G, R, C, 149, 0, 2, 1, sectors, QQ)
+    assert (0, 50, 0) == move_fn(G, 149, 0, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (0, 50, 1) == move_fn(G, R, C, 150, 0, 2, 1, sectors, QQ)
+    assert (0, 50, 1) == move_fn(G, 150, 0, 2, 1, sectors, QQ, get_descriptor_fn)
 
-    assert (0, 149, 1) == move_fn(G, R, C, 199, 49, 1, 1, sectors, QQ)
-    assert (150, 49, 2) == move_fn(G, R, C, 149, 50, 1, 1, sectors, QQ)
-    assert (199, 49, 2) == move_fn(G, R, C, 149, 99, 1, 1, sectors, QQ)
-    assert (50, 99, 2) == move_fn(G, R, C, 49, 100, 1, 1, sectors, QQ)
-    assert (99, 99, 2) == move_fn(G, R, C, 49, 149, 1, 1, sectors, QQ)
-
-
-def solve2_old(lines, type, is_test):
-    res = 0
-
-    is_sample = type == "sample"
-
-    G = {}
-    R = 0
-    C = 0
-    while True:
-        line = lines[R][:-1]
-        if line == "":
-            break
-        for (c, ch) in enumerate(line):
-            if ch != " ":
-                G[(R, c)] = ch
-                if is_test:
-                    # no walls, allow testing moves between planes
-                    G[(R, c)] = '.'
-            C = max(C, c)
-
-        R += 1
-
-        res += 1
-    C = C+1
-    if is_test:
-        print(R, C)
-
-    cmd = lines[R+1].strip()
-    I = []
-    d = ""
-    for ch in cmd:
-        if ch in ["", "R", "L"]:
-            if d != "":
-                I.append(int(d))
-                d = ""
-            I.append(ch)
-        else:
-            d += ch
-    if d != "":
-        I.append(int(d))
-
-    d = 0
-    r = 0
-    c = lines[0].index('.')
-    if is_test:
-        print(r, c, d)
-
-    if is_sample:
-        assert R == 12
-        assert C == 16
-        if is_test:
-            test2_sample(G, R, C)
-            return "None"
-    else:
-        assert R == 200
-        assert C == 150
-        if is_test:
-            test2_puzzle(G, R, C)
-            return "None"
-
-    for i in I:
-        # move
-        if i == "L":
-            d = (d+4-1) % 4
-        elif i == "R":
-            d = (d+1) % 4
-        else:
-            assert isinstance(i, int)
-
-            if is_sample:
-                r, c, d = move2_sample(G, R, C, r, c, d, i)
-            else:
-                r, c, d = move2_puzzle(G, R, C, r, c, d, i)
-
-    # print(r+1, c+1, d)
-    res = 1000*(r+1) + 4 * (c+1) + d
-
-    return res
+    assert (0, 149, 1) == move_fn(G, 199, 49, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (150, 49, 2) == move_fn(G, 149, 50, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (199, 49, 2) == move_fn(G, 149, 99, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (50, 99, 2) == move_fn(G, 49, 100, 1, 1, sectors, QQ, get_descriptor_fn)
+    assert (99, 99, 2) == move_fn(G, 49, 149, 1, 1, sectors, QQ, get_descriptor_fn)
 
 
 def get_cube_type(R, C):
@@ -638,6 +341,27 @@ def can_move_to(G, r, c):
     return ch != "#"
 
 
+def get_descriptor_sample(s, d):
+    # s-sector
+    # d-direction
+    # ..1.
+    # 234.
+    # ..56
+
+    # dir: 0=R,1=D,2=L,3=R
+    # "N"=normal, L=turn left, R=turn right, F=flip 180
+    D = {
+        1: [("F", 6), ("N", 4), ("L", 3), ("F", 2)],
+        2: [("N", 3), ("F", 5), ("R", 6), ("F", 1)],
+        3: [("N", 4), ("L", 5), ("N", 2), ("R", 1)],
+        4: [("R", 6), ("N", 5), ("N", 3), ("N", 1)],
+        5: [("N", 6), ("F", 2), ("R", 3), ("N", 4)],
+        6: [("F", 1), ("L", 2), ("N", 5), ("L", 4)],
+    }
+
+    return D[s][d]
+
+
 def get_descriptor_puzzle(s, d):
     # s-sector
     # d-direction
@@ -660,7 +384,7 @@ def get_descriptor_puzzle(s, d):
     return D[s][d]
 
 
-def step_puzzle(r, c, d, sectors, QQ):
+def step(r, c, d, sectors, QQ, get_descriptor_fn):
     current_sector = get_point_sector(r, c, sectors, QQ)
     next_point_r, next_point_c = get_next_point(r, c, d)
     next_sector = get_point_sector(next_point_r, next_point_c, sectors, QQ)
@@ -669,7 +393,7 @@ def step_puzzle(r, c, d, sectors, QQ):
         r, c = next_point_r, next_point_c
         # d is not modified
     else:
-        operation, next_sector = get_descriptor_puzzle(current_sector, d)
+        operation, next_sector = get_descriptor_fn(current_sector, d)
         if operation == "N":
             edge_d = (d + 2) % 4
             edge = get_sector_edge(sectors, next_sector, edge_d, QQ)
@@ -689,14 +413,14 @@ def step_puzzle(r, c, d, sectors, QQ):
                 r, c = edge[c_off][0]
             else:
                 r_off = r % QQ
-                r, c = edge[0][r_off]
+                r, c = edge[0][(QQ-1)-r_off]
         elif operation == "L":
             d = (d - 1 + 4) % 4
             edge_d = (d + 2) % 4
             edge = get_sector_edge(sectors, next_sector, edge_d, QQ)
             if edge_d == 0 or edge_d == 2:
                 c_off = c % QQ
-                r, c = edge[c_off][0]
+                r, c = edge[(QQ-1)-c_off][0]
             else:
                 r_off = r % QQ
                 r, c = edge[0][r_off]
@@ -709,15 +433,15 @@ def step_puzzle(r, c, d, sectors, QQ):
                 r, c = edge[(QQ-1)-r_off][0]
             else:
                 c_off = c % QQ
-                r, c = edge[0][c_off]
+                r, c = edge[0][(QQ-1)-c_off]
         else:
             assert False
     return r, c, d
 
 
-def move2new_puzzle(G, R, C, r, c, d, i, sectors, QQ):
+def move(G, r, c, d, i, sectors, QQ, get_descriptor_fn):
     while(i > 0):
-        r2, c2, d2 = step_puzzle(r, c, d, sectors, QQ)
+        r2, c2, d2 = step(r, c, d, sectors, QQ, get_descriptor_fn)
 
         if can_move_to(G, r2, c2):
             r, c, d = r2, c2, d2
@@ -788,6 +512,7 @@ def solve2(lines, type, is_test):
     sectors = get_map_sectors(G, RR, CC, QQ)
     assert len(sectors) == RR
     assert len(sectors[0]) == CC
+
     s = []
     for rr in range(RR):
         for cc in range(CC):
@@ -853,29 +578,29 @@ def solve2(lines, type, is_test):
             s6_top_edge = get_sector_edge(sectors, 6, 3, QQ)
             assert s6_top_edge[0][0] == (8, 12)
             assert s6_top_edge[0][QQ-1] == (8, 15)
+
+            test2_sample(G, move, sectors, QQ, get_descriptor_sample)
         else:
 
-            test2_puzzle(G, R, C, move2new_puzzle, sectors, QQ)
-
+            test2_puzzle(G, move, sectors, QQ, get_descriptor_puzzle)
+        return None
     else:
-        pass
-
-    for i in I:
-        # move
-        if i == "L":
-            d = (d+4-1) % 4
-        elif i == "R":
-            d = (d+1) % 4
-        else:
-            assert isinstance(i, int)
-
-            if is_sample:
-                assert False, "Not implemented"
+        for i in I:
+            # move
+            if i == "L":
+                d = (d+4-1) % 4
+            elif i == "R":
+                d = (d+1) % 4
             else:
-                r, c, d = move2new_puzzle(G, R, C, r, c, d, i, sectors, QQ)
+                assert isinstance(i, int)
 
-    # print(r+1, c+1, d)
-    res = 1000*(r+1) + 4 * (c+1) + d
+                if is_sample:
+                    r, c, d = move(G, r, c, d, i, sectors, QQ, get_descriptor_sample)
+                else:
+                    r, c, d = move(G, r, c, d, i, sectors, QQ, get_descriptor_puzzle)
+
+        # print(r+1, c+1, d)
+        res = 1000*(r+1) + 4 * (c+1) + d
     return res
 
 
@@ -886,7 +611,7 @@ is_test = False
 print(CRED + "sample:", solve1(lines_sample, "sample", is_test), CEND)  # 6032
 print(CGRN + "puzzle:", solve1(lines_puzzle, "puzzle", is_test), CEND)  # 76332
 
-# print(CRED + "sample:", solve2(lines_sample, "sample", is_test), CEND)  # 5031
+print(CRED + "sample:", solve2(lines_sample, "sample", is_test), CEND)  # 5031
 print(CGRN + "puzzle:", solve2(lines_puzzle, "puzzle", is_test), CEND)  # 144012
 
 
