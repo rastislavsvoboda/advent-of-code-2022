@@ -17,13 +17,16 @@ string[] SplitCompartments(string rucksack)
 }
 
 
-char Intersect2(string[] strings)
+char Intersect(string[] strings)
 {
-    System.Diagnostics.Debug.Assert(strings.Length == 2);
     var res = new HashSet<char>(strings[0]);
-    res.IntersectWith(strings[1]);
-    return res.Single();
+    foreach (var str in strings.Skip(1))
+    {
+        res.IntersectWith(str);
+    }
+    return res.FirstOrDefault();
 }
+
 
 int Priority(char ch)
 {
@@ -38,30 +41,19 @@ int Priority(char ch)
     throw new ArgumentOutOfRangeException("ch should be uppercase or lowercase letter");
 }
 
-var prioritiesP1 = rucksacks
+var totalPrioritiesP1 = rucksacks
     .Select(SplitCompartments)
-    .Select(strings => Priority(Intersect2(strings)))
+    .Select(strings => Priority(Intersect(strings)))
     .Sum();
 
 #!csharp
 
-char Intersect3(string[] strings)
-{
-    System.Diagnostics.Debug.Assert(strings.Length == 3);
-    var res = new HashSet<char>(strings[0]);
-    res.IntersectWith(strings[1]);
-    res.IntersectWith(strings[2]);
-    return res.Single();
-}
-
-var prioritiesP2 = rucksacks
-    .Select((r, i) => (i, r))
-    .GroupBy(g => g.Item1 / 3)
-    .Select(g => g.Select(x => x.Item2).ToArray())
-    .Select(strings => Priority(Intersect3(strings)))
+var totalPrioritiesP2 = rucksacks
+    .Chunk(3)
+    .Select(strings => Priority(Intersect(strings)))
     .Sum();
 
 #!csharp
 
-Console.WriteLine("Part1 {0}", prioritiesP1);
-Console.WriteLine("Part2 {0}", prioritiesP2);
+Console.WriteLine("Part1 {0}", totalPrioritiesP1);
+Console.WriteLine("Part2 {0}", totalPrioritiesP2);
