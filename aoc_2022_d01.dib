@@ -1,0 +1,17 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"httpRequest","languageName":"http"},{"name":"value"}]}}
+
+#!csharp
+
+var nums = System.IO.File.ReadAllText("1.in")
+    .Split("\n\n")
+    .Select(g => g
+        .Split("\n", StringSplitOptions.RemoveEmptyEntries)
+        .Select(Int32.Parse)
+        .Sum()); 
+
+#!csharp
+
+Console.WriteLine("Part1 {0}", nums.OrderByDescending(x => x).First());
+Console.WriteLine("Part2 {0}", nums.OrderByDescending(x => x).Take(3).Sum());
