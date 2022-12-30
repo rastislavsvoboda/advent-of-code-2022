@@ -1,0 +1,64 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"httpRequest","languageName":"http"},{"name":"value"}]}}
+
+#!csharp
+
+var entries = System.IO.File.ReadAllLines("2.in")
+    .Select(line => 
+        {
+            var parts = line.Split(" ");
+            return (parts[0], parts[1]);
+        });
+
+var pl1 = new Dictionary<string, int>{{"A", 1},{"B", 2},{"C", 3}};
+var pl2 = new Dictionary<string, int>{{"X", 1},{"Y", 2},{"Z", 3}};    
+
+#!csharp
+
+int Score1((string player1, string player2) data)
+{
+    var val1 = pl1[data.player1];
+    var val2 = pl2[data.player2];
+
+    if (val1 == val2) 
+    {
+        // draw
+        return val2 + 3;
+    }
+    else if (((val2 - val1 + 3) % 3) == 1)
+    {
+        // win
+        return val2 + 6;
+    }
+    else
+    {
+        // loose
+        return val2 + 0;
+    }
+}
+
+#!csharp
+
+int Score2((string player1, string player2) data)
+{
+    var val1 = pl1[data.player1];
+    var val2 = (data.player2) switch 
+    {
+        // loose
+        "X" => (((val1 - 1) - 1 + 3) % 3) + 1,
+        // draw
+        "Y" => val1,
+        // win
+        "Z" => (((val1 - 1) + 1) % 3) + 1,
+        _ => throw new ArgumentOutOfRangeException("unknonw value of palyer data2 value")
+    };
+
+    var shape2 = pl2.Where(kvp => kvp.Value == val2).First().Key;
+    return Score1((data.player1, shape2));
+}
+
+#!csharp
+
+Console.WriteLine("Part1 {0}", entries.Select(Score1).Sum());
+Console.WriteLine("Part2 {0}", entries.Select(Score2).Sum());
