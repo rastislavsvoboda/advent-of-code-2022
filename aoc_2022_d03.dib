@@ -1,0 +1,67 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"httpRequest","languageName":"http"},{"name":"value"}]}}
+
+#!csharp
+
+var rucksucks = System.IO.File.ReadAllLines("3.in");
+
+#!csharp
+
+string[] SplitCompartments(string rucksuck)
+{
+    var half = rucksuck.Length / 2;
+    var c1 = rucksuck.Substring(0, half);
+    var c2 = rucksuck.Substring(half);
+    return new string[] { c1, c2 };
+}
+
+
+char Intersect2(string[] strings)
+{
+    System.Diagnostics.Debug.Assert(strings.Length == 2);
+    var res = new HashSet<char>(strings[0]);
+    res.IntersectWith(strings[1]);
+    return res.Single();
+}
+
+int Priority(char ch)
+{
+    if ('a' <= ch && ch <= 'z')
+    {
+        return ((int)(ch) - (int)('a')) + 1;
+    }
+    if ('A' <= ch && ch <= 'Z')
+    {
+        return ((int)(ch) - (int)('A')) + 27;
+    }
+    throw new ArgumentOutOfRangeException("ch should be uppercase or lowercase letter");
+}
+
+var prioritiesP1 = rucksucks
+    .Select(SplitCompartments)
+    .Select(strings => Priority(Intersect2(strings)))
+    .Sum();
+
+#!csharp
+
+char Intersect3(string[] strings)
+{
+    System.Diagnostics.Debug.Assert(strings.Length == 3);
+    var res = new HashSet<char>(strings[0]);
+    res.IntersectWith(strings[1]);
+    res.IntersectWith(strings[2]);
+    return res.Single();
+}
+
+var prioritiesP2 = rucksucks
+    .Select((r, i) => (i, r))
+    .GroupBy(g => g.Item1 / 3)
+    .Select(g => g.Select(x => x.Item2).ToArray())
+    .Select(strings => Priority(Intersect3(strings)))
+    .Sum();
+
+#!csharp
+
+Console.WriteLine("Part1 {0}", prioritiesP1);
+Console.WriteLine("Part2 {0}", prioritiesP2);
