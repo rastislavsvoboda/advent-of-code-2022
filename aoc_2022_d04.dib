@@ -1,0 +1,68 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"httpRequest","languageName":"http"},{"name":"value"}]}}
+
+#!csharp
+
+var sections = System.IO.File.ReadAllLines("4.in");
+
+#!csharp
+
+(Range, Range) ToRangePair(string[] items)
+{
+    Range toRange(string[] parts)
+    {
+        var start = Int32.Parse(parts[0]);
+        var end = Int32.Parse(parts[1]);
+        return new Range(start, end);
+    }
+
+    return (toRange(items[0].Split('-')), toRange(items[1].Split('-')));
+}
+
+bool FullyContain((Range r1, Range r2) ranges)
+{
+    if (ranges.r1.Start.Value <= ranges.r2.Start.Value && ranges.r2.End.Value <= ranges.r1.End.Value)
+    {
+        return true;
+    }
+
+    if (ranges.r2.Start.Value <= ranges.r1.Start.Value && ranges.r1.End.Value <= ranges.r2.End.Value)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+var countP1 = sections
+    .Select(s => s.Split(','))
+    .Select(ToRangePair)
+    .Count(FullyContain);
+
+#!csharp
+
+bool Overlap((Range r1, Range r2) ranges)
+{
+    if (ranges.r1.Start.Value <= ranges.r2.Start.Value && ranges.r2.Start.Value <= ranges.r1.End.Value)
+    {
+        return true;
+    }
+
+    if (ranges.r2.Start.Value <= ranges.r1.Start.Value && ranges.r1.Start.Value <= ranges.r2.End.Value)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+var countP2 = sections
+    .Select(s => s.Split(','))
+    .Select(ToRangePair)
+    .Count(Overlap);
+
+#!csharp
+
+Console.WriteLine("Part1 {0}", countP1);
+Console.WriteLine("Part2 {0}", countP2);
