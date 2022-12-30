@@ -4,15 +4,15 @@
 
 #!csharp
 
-var rucksucks = System.IO.File.ReadAllLines("3.in");
+var rucksacks = System.IO.File.ReadAllLines("3.in");
 
 #!csharp
 
-string[] SplitCompartments(string rucksuck)
+string[] SplitCompartments(string rucksack)
 {
-    var half = rucksuck.Length / 2;
-    var c1 = rucksuck.Substring(0, half);
-    var c2 = rucksuck.Substring(half);
+    var half = rucksack.Length / 2;
+    var c1 = rucksack.Substring(0, half);
+    var c2 = rucksack.Substring(half);
     return new string[] { c1, c2 };
 }
 
@@ -38,7 +38,7 @@ int Priority(char ch)
     throw new ArgumentOutOfRangeException("ch should be uppercase or lowercase letter");
 }
 
-var prioritiesP1 = rucksucks
+var prioritiesP1 = rucksacks
     .Select(SplitCompartments)
     .Select(strings => Priority(Intersect2(strings)))
     .Sum();
@@ -54,7 +54,7 @@ char Intersect3(string[] strings)
     return res.Single();
 }
 
-var prioritiesP2 = rucksucks
+var prioritiesP2 = rucksacks
     .Select((r, i) => (i, r))
     .GroupBy(g => g.Item1 / 3)
     .Select(g => g.Select(x => x.Item2).ToArray())
