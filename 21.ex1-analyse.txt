@@ -1,0 +1,18 @@
+root: pppw + sjmn
+
+pppw: cczh / lfqf
+    cczh: sllz + lgvd
+        sllz: 4
+        lgvd: ljgn * ptdq
+            ljgn: 2
+            ptdq: humn - dvpt
+                humn: ???(5)
+                dvpt: 3
+    lfqf: 4
+
+sjmn: drzm * dbpl
+    dbpl: 5
+    drzm: hmdt - zczc
+        hmdt: 32
+        zczc: 2
+

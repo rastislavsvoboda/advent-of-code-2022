@@ -51,18 +51,25 @@ def solve1(text):
 
 def solve2(text):
     D = []
-    D.append([[2]])
-    D.append([[6]])
 
     for line in text.split('\n'):
         if line == "":
             continue
         D.append(eval(line))
 
-    D.sort(key=cmp_to_key(comp))
+    i1 = 1
+    i2 = 1
+    for d in D:
+        if comp(d, [[2]]) < 0:
+            i1 += 1
+        if comp(d, [[6]]) < 0:
+            i2 += 1
 
-    i1 = D.index([[2]]) + 1
-    i2 = D.index([[6]]) + 1
+    if comp([[2]], [[6]]) < 0:
+        i2 += 1
+    else:
+        i1 += 1
+
     res = i1 * i2
     return res
 

@@ -43,6 +43,38 @@ def append_edge(G, s, d, L):
         dy += 1
         dd -= 1
 
+def get_edges_at(s,d,x,limit):
+    res=[]    
+    sx, sy = s
+    dx = abs(sx-x)
+    dy = d - dx
+    if dy < 0:
+        return res
+    x1 = sx-dy
+    x2 = sx+dy
+
+
+    # dd = d+1
+    # dy = 0
+    # sx, sy = s
+    # while dd > 0:
+    #     x1 = sx-dd
+    #     x2 = sx+dd
+    #     y1 = sy-dy
+    #     y2 = sy+dy
+
+    #     if 0 <= x1 <= L and 0 <= y1 <= L:
+    #         G.add((x1, y1))
+    #     if 0 <= x1 <= L and 0 <= y2 <= L:
+    #         G.add((x1, y2))
+    #     if 0 <= x2 <= L and 0 <= y1 <= L:
+    #         G.add((x2, y1))
+    #     if 0 <= x2 <= L and 0 <= y2 <= L:
+    #         G.add((x2, y2))
+    #     dy += 1
+    #     dd -= 1
+
+
 
 def solve1(lines, Y):
     G = set()
@@ -92,6 +124,40 @@ def solve2(lines, limit):
         s = (nums[0], nums[1])
         b = (nums[2], nums[3])
         d = manh_dist(s, b)
+        S.append(s)
+        D.append(d)
+    print(len(G))
+
+    res= None
+
+    while True:
+        for x in range(0,limit+1):
+            edges = get_edges_at(S,x,limit)
+            for (i,s) in enumerate(S):
+
+                d = manh_dist(s, p)
+                if d <= D[i]:
+                    found = True
+                    break
+        # if not found:
+        #     print(p)
+        #     x = p[0]
+        #     y = p[1]
+        #     res = x * 4000000 + y
+        #     break
+
+    return res
+
+def solve2_different(lines, limit):
+    G = set()
+    S = []  # signals
+    D = []  # distances
+    for line in lines:
+        line = line.strip()
+        nums = [int(n) for n in re.findall(r"[+-]?\d+", line)]
+        s = (nums[0], nums[1])
+        b = (nums[2], nums[3])
+        d = manh_dist(s, b)
         append_edge(G,s,d, limit)
         S.append(s)
         D.append(d)
@@ -115,7 +181,6 @@ def solve2(lines, limit):
             break
 
     return res
-
 
 # print(CRED + "sample:", solve1(lines_sample, Y_sample), CEND)  # 26
 # print(CGRN + "puzzle:", solve1(lines_puzzle, Y_puzzle), CEND)  # 5525990

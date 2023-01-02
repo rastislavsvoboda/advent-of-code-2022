@@ -12,13 +12,11 @@ lines_puzzle = open('13.in').read()
 
 def comp(n1, n2):
     if isinstance(n1, int) and isinstance(n2, int):
-        return n1 < n2
+        return -1 if n1 < n2 else 1 if n1 > n2 else 0
 
     if isinstance(n1, list) and isinstance(n2, list):
-        if len(n1) == 0:
-            return True
-        if len(n2) == 0:
-            return False
+        if len(n1) == 0 or len(n2) == 0:
+            return -1 if len(n1) < len(n2) else 1 if len(n1) > len(n2) else 0
         if n1[0] == n2[0]:
             return comp(n1[1:], n2[1:])
         return comp(n1[0], n2[0])
@@ -41,7 +39,7 @@ def solve1(text):
         r = eval(lines[1].strip())
         # print(l)
         # print(r)
-        if comp(l, r):
+        if comp(l, r) != 1:
             I.append(i)
 
         i += 1

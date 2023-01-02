@@ -648,7 +648,7 @@ def solve2(lines, type, is_test):
     return res
 
 
-is_test = False
+is_test = True
 
 # hardcoded for my input
 

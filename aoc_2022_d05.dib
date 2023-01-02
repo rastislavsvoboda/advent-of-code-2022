@@ -90,7 +90,7 @@ Stack<char>[] CreateStacks(List<IEnumerable<char>> rows)
 
 string Answer(Stack<char>[] stacks)
 {
-    return string.Join("", stacks.Select(x => x.Pop()));
+    return string.Join("", stacks.Select(x => x.Peek()));
 }
 
 string Solve(Action<Stack<char>[],(int count, int frm, int to)> process)
