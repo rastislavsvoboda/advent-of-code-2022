@@ -1,0 +1,110 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"httpRequest","languageName":"http"},{"name":"value"}]}}
+
+#!csharp
+
+var data = System.IO.File.ReadAllText("5.in");
+
+#!csharp
+
+var parts = data.Split("\n\n");
+var setup = parts[0].Split("\n");
+var instructions = parts[1].Split("\n");
+
+var rows = setup.Select(line => 
+    line.ToArray()
+        .Chunk(4)
+        .Select(x => x.ToArray()[1])
+    )
+    .Reverse()
+    .Skip(1)
+    .ToList();
+
+(int a, int b, int c) ParseInstruction(string str)
+{
+    var rx = new System.Text.RegularExpressions.Regex(@"move (\d+) from (\d+) to (\d+)",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    var matches = rx.Matches(str);
+    var grp = matches[0];
+    return (Int32.Parse(grp.Groups[1].Value), Int32.Parse(grp.Groups[2].Value), Int32.Parse(grp.Groups[3].Value));
+}
+
+var parsedInstructions = instructions.Select(ParseInstruction).ToList();
+
+#!csharp
+
+void ProcessInstruction1(Stack<char>[] stacks, (int count, int frm, int to) instruction)
+{
+    var stackFrom = stacks[instruction.frm - 1];
+    var stackTo = stacks[instruction.to - 1];
+
+    while (instruction.count > 0)
+    {
+        var item = stackFrom.Pop();
+        stackTo.Push(item);
+        instruction.count--;
+    }
+}
+
+#!csharp
+
+void ProcessInstruction2(Stack<char>[] stacks, (int count, int frm, int to) instruction)
+{
+    var stackFrom = stacks[instruction.frm - 1];
+    var stackTo = stacks[instruction.to - 1];
+    var tempStack = new Stack<char>();
+
+    while (instruction.count > 0)
+    {
+        var item = stackFrom.Pop();
+        tempStack.Push(item);
+        instruction.count--;
+    }
+
+    while (tempStack.Count() > 0)
+    {
+        var item = tempStack.Pop();
+        stackTo.Push(item);
+    }
+}
+
+#!csharp
+
+Stack<char>[] CreateStacks(List<IEnumerable<char>> rows)
+{
+    var stacksCount = rows[0].Count();
+    var stacks = new Stack<char>[stacksCount];
+    Enumerable.Range(0,stacksCount)
+        .ToList()
+        .ForEach(i => stacks[i] = new Stack<char>());
+
+    void PushRow(IEnumerable<char> row)
+    {
+        row.Select((ch,i) => (ch,i))
+            .Where(x => x.ch != ' ')
+            .ToList()
+            .ForEach(x => stacks[x.i].Push(x.ch));
+    }
+
+    rows.ForEach(PushRow);
+    return stacks;
+}
+
+string Answer(Stack<char>[] stacks)
+{
+    return string.Join("", stacks.Select(x => x.Pop()));
+}
+
+string Solve(Action<Stack<char>[],(int count, int frm, int to)> process)
+{
+    var stacks = CreateStacks(rows);
+    parsedInstructions.ForEach(instr => process(stacks, instr));
+    var answer = Answer(stacks);
+    return answer;
+}
+
+#!csharp
+
+Console.WriteLine("Part1 {0}", Solve(ProcessInstruction1));
+Console.WriteLine("Part2 {0}", Solve(ProcessInstruction2));
