@@ -63,38 +63,22 @@ string Solve(string data, Action<Stack<char>[],(int count, int from, int to)> pr
     var setup = parts[0].Split("\n");
     var instructions = parts[1].Split("\n");
 
-    Stack<char>[] CreateStacks(string[] setup)
+    var stacks = setup
+        .Last()
+        .Chunk(4)
+        .Select(_ => new Stack<char>())
+        .ToArray();
+
+    foreach (var row in setup.Reverse().Skip(1))
     {
-        var rows = setup.Select(line => 
-            line.ToArray()
-                .Chunk(4)
-                .Select(x => x.ToArray()[1])
-            )
-            .Reverse()
-            .Skip(1)
-            .ToList();
-
-        var numLine = setup.Last();  
-
-        var stacks = numLine.Chunk(4)
-            .Select(_ => new Stack<char>())
-            .ToArray();
-
-        foreach (var row in rows)
+        foreach (var (stack,item) in stacks.Zip(row.Chunk(4)))
         {
-            foreach (var (stack,ch) in stacks.Zip(row))
+            if (item[1] != ' ')
             {
-                if (ch != ' ')
-                {
-                    stack.Push(ch);
-                }
+                stack.Push(item[1]);
             }
-        }    
-
-        return stacks;
-    }
-    
-    var stacks = CreateStacks(setup);
+        }
+    }    
 
     foreach (var instr in instructions.Select(ParseInstruction))
     {
