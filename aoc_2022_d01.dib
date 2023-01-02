@@ -7,7 +7,7 @@
 var nums = System.IO.File.ReadAllText("1.in")
     .Split("\n\n")
     .Select(g => g
-        .Split("\n", StringSplitOptions.RemoveEmptyEntries)
+        .Split("\n")
         .Select(Int32.Parse)
         .Sum()); 
 
