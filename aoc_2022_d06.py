@@ -30,6 +30,7 @@ def solve(lines, part):
 
 print(CRED + "sample:", solve(lines_sample, 1), CEND)  # 7
 print(CGRN + "puzzle:", solve(lines_puzzle, 1), CEND)  # 1109
+
 print(CRED + "sample:", solve(lines_sample, 2), CEND)  # 19
 print(CGRN + "puzzle:", solve(lines_puzzle, 2), CEND)  # 3965
 

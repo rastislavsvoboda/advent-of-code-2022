@@ -1,8 +1,12 @@
 from datetime import datetime
 
+CRED = '\033[91m'
+CGRN = '\033[92m'
+CEND = '\033[0m'
+
 start = datetime.now()
-lines = open('3.in').readlines()
-# lines = open('3.ex1').readlines()
+lines_puzzle = open('3.in').readlines()
+lines_sample = open('3.ex1').readlines()
 
 
 def priority(c):
@@ -55,8 +59,11 @@ def solve2(lines):
     return res
 
 
-print(solve1(lines))  # 8298
-print(solve2(lines))  # 2708
+print(CRED + "sample:", solve1(lines_sample), CEND)  # 157
+print(CGRN + "puzzle:", solve1(lines_puzzle), CEND)  # 8298
+
+print(CRED + "sample:", solve2(lines_sample), CEND)  # 70
+print(CGRN + "puzzle:", solve2(lines_puzzle), CEND)  # 2708
 
 stop = datetime.now()
 print("duration:", stop - start)

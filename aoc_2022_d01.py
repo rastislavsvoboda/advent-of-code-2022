@@ -1,9 +1,12 @@
 from datetime import datetime
 
-# pypy3.exe .\save.py 1
+CRED = '\033[91m'
+CGRN = '\033[92m'
+CEND = '\033[0m'
 
 start = datetime.now()
-text = open('1.in').read()
+text_puzzle = open('1.in').read()
+text_sample = open('1.ex1').read()
 
 
 def get_data(text):
@@ -33,9 +36,13 @@ def solve2(data):
     return res
 
 
-data = get_data(text)
-print(solve1(data))  # 70509
-print(solve2(data))  # 208567
+data_sample = get_data(text_sample)
+data_puzzle = get_data(text_puzzle)
+
+print(CRED + "sample:", solve1(data_sample), CEND)  # 24000
+print(CGRN + "puzzle:", solve1(data_puzzle), CEND)  # 70509
+print(CRED + "sample:", solve2(data_sample), CEND)  # 45000
+print(CGRN + "puzzle:", solve2(data_puzzle), CEND)  # 208567
 
 stop = datetime.now()
 print("duration:", stop - start)

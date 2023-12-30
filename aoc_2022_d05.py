@@ -1,6 +1,10 @@
 from datetime import datetime
 import re
 
+CRED = '\033[91m'
+CGRN = '\033[92m'
+CEND = '\033[0m'
+
 start = datetime.now()
 lines = open('5-modified.in').readlines()
 # lines = open('5-modified.ex1').readlines()

@@ -1,9 +1,13 @@
 from datetime import datetime
 import re
 
+CRED = '\033[91m'
+CGRN = '\033[92m'
+CEND = '\033[0m'
+
 start = datetime.now()
-lines = open('4.in').readlines()
-# lines = open('4.ex1').readlines()
+lines_puzzle = open('4.in').readlines()
+lines_sample = open('4.ex1').readlines()
 
 
 def in_range(s1, e1, s2, e2):
@@ -36,7 +40,9 @@ def solve(lines):
     return res1, res2
 
 
-print(solve(lines))  # 487, 849
+print(CRED + "sample:", solve(lines_sample), CEND)  # 2, 4
+print(CGRN + "puzzle:", solve(lines_puzzle), CEND)  # 487, 849
+
 
 stop = datetime.now()
 print("duration:", stop - start)

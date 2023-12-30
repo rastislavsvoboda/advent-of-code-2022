@@ -1,7 +1,12 @@
 from datetime import datetime
 
+CRED = '\033[91m'
+CGRN = '\033[92m'
+CEND = '\033[0m'
+
 start = datetime.now()
-lines = open('2.in').readlines()
+lines_puzzle = open('2.in').readlines()
+lines_sample = open('2.ex1').readlines()
 
 PL1 = {'A': 1, 'B': 2, 'C': 3}
 PL2 = {'X': 1, 'Y': 2, 'Z': 3}
@@ -75,8 +80,11 @@ def solve2(lines):
     return res
 
 
-print(solve1(lines))  # 11150
-print(solve2(lines))  # 8295
+print(CRED + "sample:", solve1(lines_sample), CEND)  # 15
+print(CGRN + "puzzle:", solve1(lines_puzzle), CEND)  # 11150
+
+print(CRED + "sample:", solve2(lines_sample), CEND)  # 12
+print(CGRN + "puzzle:", solve2(lines_puzzle), CEND)  # 8295
 
 stop = datetime.now()
 print("duration:", stop - start)
