@@ -14,88 +14,85 @@ text_sample = open('19.ex1').read()
 def calculate(total_minutes, blueprint):
     id, ore_r_ore, cla_r_ore, obs_r_ore, obs_r_cla, geo_r_ore, geo_r_obs = blueprint
 
-    robots = (1, 0, 0, 0)
-    materials = (0, 0, 0, 0)
-
-    ORE = 0
-    CLA = 1
-    OBS = 2
-    GEO = 3
-
     max_ore = max((ore_r_ore, cla_r_ore, obs_r_ore, geo_r_ore))
     max_cla = obs_r_cla
     max_obs = geo_r_obs
 
-    def update_material_with_limit(material, robots, minutes_left):
-        ore = min(material[ORE] + robots[ORE], max_ore * minutes_left)
-        cla = min(material[CLA] + robots[CLA], max_cla * minutes_left)
-        obs = min(material[OBS] + robots[OBS], max_obs * minutes_left)
-        geo = material[GEO] + robots[GEO]  # never limit geo
+    def update_and_limit(ore_m, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes_left):
+        ore = min(ore_m + ore_r, max_ore * minutes_left)
+        cla = min(cla_m + cla_r, max_cla * minutes_left)
+        obs = min(obs_m + obs_r, max_obs * minutes_left)
+        geo = geo_m + geo_r  # never limit geo
         return (ore, cla, obs, geo)
 
     @lru_cache(maxsize=None)
-    def dp(minutes, robots, materials):
+    def dp(minutes, ore_r, cla_r, obs_r, geo_r, ore_m, cla_m, obs_m, geo_m):
         if minutes <= 0:
             return 0
 
         answer = 0
 
         # build geo
-        if (materials[ORE] >= geo_r_ore
-                and materials[OBS] >= geo_r_obs
+        if (ore_m >= geo_r_ore
+                and obs_m >= geo_r_obs
                 and minutes > 1):
-            ore_r, cla_r, obs_r, geo_r = robots
-            new_material = list(materials)
-            new_material[ORE] -= geo_r_ore
-            new_material[OBS] -= geo_r_obs
-            limited_material = update_material_with_limit(new_material, robots, minutes - 1)
-            answer = max(answer, (minutes - 1) + dp(minutes - 1, (ore_r, cla_r, obs_r, geo_r + 1), limited_material))
+            ore = ore_m - geo_r_ore
+            cla = cla_m
+            obs = obs_m - geo_r_obs
+            geo = geo_m
+            ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+            answer = max(answer, (minutes - 1) + dp(minutes - 1, ore_r, cla_r, obs_r, geo_r + 1, ore, cla, obs, geo))
             # don't try other option when GEO will be build
             return answer
 
         # build obsidian
-        if (materials[ORE] >= obs_r_ore
-                and materials[CLA] >= obs_r_cla
+        if (ore_m >= obs_r_ore
+                and cla_m >= obs_r_cla
                 and minutes > 1
-                and robots[OBS] < max_obs
-                and materials[OBS] < max_obs * minutes):
-            ore_r, cla_r, obs_r, geo_r = robots
-            new_material = list(materials)
-            new_material[ORE] -= obs_r_ore
-            new_material[CLA] -= obs_r_cla
-            limited_material = update_material_with_limit(new_material, robots, minutes - 1)
-            answer = max(answer, dp(minutes - 1, (ore_r, cla_r, obs_r + 1, geo_r), limited_material))
+                and obs_r < max_obs
+                and obs_m < max_obs * minutes):
+            ore = ore_m - obs_r_ore
+            cla = cla_m - obs_r_cla
+            obs = obs_m
+            geo = geo_m
+            ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+            answer = max(answer, dp(minutes - 1, ore_r, cla_r, obs_r + 1, geo_r, ore, cla, obs, geo))
 
         # build clay
-        if (materials[ORE] >= cla_r_ore
+        if (ore_m >= cla_r_ore
                 and minutes > 1
-                and robots[CLA] < max_cla
-                and materials[CLA] < max_cla * minutes):
-            ore_r, cla_r, obs_r, geo_r = robots
-            new_material = list(materials)
-            new_material[ORE] -= cla_r_ore
-            limited_material = update_material_with_limit(new_material, robots, minutes - 1)
-            answer = max(answer, dp(minutes - 1, (ore_r, cla_r + 1, obs_r, geo_r), limited_material))
+                and cla_r < max_cla
+                and cla_m < max_cla * minutes):
+            ore = ore_m - cla_r_ore
+            cla = cla_m
+            obs = obs_m
+            geo = geo_m
+            ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+            answer = max(answer, dp(minutes - 1, ore_r, cla_r + 1, obs_r, geo_r, ore, cla, obs, geo))
 
         # build ore
-        if (materials[ORE] >= ore_r_ore
+        if (ore_m >= ore_r_ore
                 and minutes > 1
-                and robots[ORE] < max_ore
-                and materials[ORE] < max_obs * minutes):
-            ore_r, cla_r, obs_r, geo_r = robots
-            new_material = list(materials)
-            new_material[ORE] -= ore_r_ore
-            limited_material = update_material_with_limit(new_material, robots, minutes - 1)
-            answer = max(answer, dp(minutes - 1, (ore_r + 1, cla_r, obs_r, geo_r), limited_material))
+                and ore_r < max_ore
+                and ore_m < max_obs * minutes):
+            ore = ore_m - ore_r_ore
+            cla = cla_m
+            obs = obs_m
+            geo = geo_m
+            ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+            answer = max(answer, dp(minutes - 1, ore_r + 1, cla_r, obs_r, geo_r, ore, cla, obs, geo))
 
         # don't build any robot
-        new_material = list(materials)
-        limited_material = update_material_with_limit(new_material, robots, minutes - 1)
-        answer = max(answer, dp(minutes - 1, robots, limited_material))
+        ore = ore_m
+        cla = cla_m
+        obs = obs_m
+        geo = geo_m
+        ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+        answer = max(answer, dp(minutes - 1, ore_r, cla_r, obs_r, geo_r, ore, cla, obs, geo))
 
         return answer
 
-    return dp(total_minutes, robots, materials)
+    return dp(total_minutes, 1,0,0,0, 0,0,0,0)
 
 
 def solve(text, part):
@@ -133,8 +130,8 @@ def solve(text, part):
 print(CRED + "sample:", solve(text_sample, 1), CEND)  # 33
 print(CGRN + "puzzle:", solve(text_puzzle, 1), CEND)  # 1127
 
-print(CRED + "sample:", solve(text_sample, 2), CEND)  # 3472
-print(CGRN + "puzzle:", solve(text_puzzle, 2), CEND)  # 21546
+print(CRED + "sample:", solve(text_sample, 2), CEND)  # 3472 (56 * 62)
+print(CGRN + "puzzle:", solve(text_puzzle, 2), CEND)  # 21546 (21 * 27 * 38)
 
 stop = datetime.now()
 print("duration:", stop - start)
