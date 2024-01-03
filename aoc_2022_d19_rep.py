@@ -18,61 +18,64 @@ def calculate(total_minutes, blueprint):
     max_cla = obs_r_cla
     max_obs = geo_r_obs
 
-    def update_and_limit(ore_m, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes_left):
+    def update_mat(ore_m, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes_left):
+        # update material and limit it to max needed values for minutes that left till end
         ore = min(ore_m + ore_r, max_ore * minutes_left)
         cla = min(cla_m + cla_r, max_cla * minutes_left)
         obs = min(obs_m + obs_r, max_obs * minutes_left)
-        geo = geo_m + geo_r  # never limit geo
+        geo = geo_m + geo_r  # never limit geode
         return (ore, cla, obs, geo)
 
     @lru_cache(maxsize=None)
-    def dp(minutes, ore_r, cla_r, obs_r, geo_r, ore_m, cla_m, obs_m, geo_m):
-        if minutes <= 0:
+    def dp(t, ore_r, cla_r, obs_r, geo_r, ore_m, cla_m, obs_m, geo_m):
+        # t - time left, xxx_r - robot, xxx_m - material
+
+        if t <= 0:
             return 0
 
         answer = 0
 
-        # build geo
+        # try build geode robot
         if (ore_m >= geo_r_ore
                 and obs_m >= geo_r_obs
-                and minutes > 1):
-            new_mat = update_and_limit(ore_m - geo_r_ore, cla_m, obs_m - geo_r_obs, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-            answer = max(answer, (minutes - 1) + dp(minutes - 1, ore_r, cla_r, obs_r, geo_r + 1, *new_mat))
-            # don't try other option when GEO will be build
+                and t > 1):
+            mat = update_mat(ore_m - geo_r_ore, cla_m, obs_m - geo_r_obs, geo_m, ore_r, cla_r, obs_r, geo_r, t - 1)
+            answer = max(answer, (t - 1) + dp(t - 1, ore_r, cla_r, obs_r, geo_r + 1, *mat))
+            # don't try other options when geode robot will be build (cannot have better score)
             return answer
 
-        # build obsidian
+        # try build obsidian robot
         if (ore_m >= obs_r_ore
                 and cla_m >= obs_r_cla
-                and minutes > 1
+                and t > 1
                 and obs_r < max_obs
-                and obs_m < max_obs * minutes):
-            new_mat = update_and_limit(ore_m - obs_r_ore, cla_m - obs_r_cla, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-            answer = max(answer, dp(minutes - 1, ore_r, cla_r, obs_r + 1, geo_r, *new_mat))
+                and obs_m < max_obs * t):
+            mat = update_mat(ore_m - obs_r_ore, cla_m - obs_r_cla, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, t - 1)
+            answer = max(answer, dp(t - 1, ore_r, cla_r, obs_r + 1, geo_r, *mat))
 
-        # build clay
+        # try build clay robot
         if (ore_m >= cla_r_ore
-                and minutes > 1
+                and t > 1
                 and cla_r < max_cla
-                and cla_m < max_cla * minutes):
-            new_mat = update_and_limit(ore_m - cla_r_ore, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-            answer = max(answer, dp(minutes - 1, ore_r, cla_r + 1, obs_r, geo_r, *new_mat))
+                and cla_m < max_cla * t):
+            mat = update_mat(ore_m - cla_r_ore, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, t - 1)
+            answer = max(answer, dp(t - 1, ore_r, cla_r + 1, obs_r, geo_r, *mat))
 
-        # build ore
+        # try build ore robot
         if (ore_m >= ore_r_ore
-                and minutes > 1
+                and t > 1
                 and ore_r < max_ore
-                and ore_m < max_obs * minutes):
-            new_mat = update_and_limit(ore_m - ore_r_ore, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-            answer = max(answer, dp(minutes - 1, ore_r + 1, cla_r, obs_r, geo_r, *new_mat))
+                and ore_m < max_obs * t):
+            mat = update_mat(ore_m - ore_r_ore, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, t - 1)
+            answer = max(answer, dp(t - 1, ore_r + 1, cla_r, obs_r, geo_r, *mat))
 
         # don't build any robot
-        new_mat = update_and_limit(ore_m, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-        answer = max(answer, dp(minutes - 1, ore_r, cla_r, obs_r, geo_r, *new_mat))
+        mat = update_mat(ore_m, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, t - 1)
+        answer = max(answer, dp(t - 1, ore_r, cla_r, obs_r, geo_r, *mat))
 
         return answer
 
-    return dp(total_minutes, 1,0,0,0, 0,0,0,0)
+    return dp(total_minutes, 1, 0, 0, 0, 0, 0, 0, 0)
 
 
 def solve(text, part):
@@ -96,7 +99,7 @@ def solve(text, part):
     elif part == 2:
         minutes = 32
         res = 1
-        B = B[:3] # use only first 3 blueprints
+        B = B[:3]  # use only first 3 blueprints
         for b in B:
             id = b[0]
             geodes = calculate(minutes, b)
