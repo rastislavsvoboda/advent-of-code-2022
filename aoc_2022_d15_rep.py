@@ -11,9 +11,6 @@ text_puzzle = open('15.in').read()
 text_sample = open('15.ex1').read()
 
 
-def manhattan_dist(x1, y1, x2, y2):
-    return abs(x1 - x2) + abs(y1 - y2)
-
 
 def solve1(text, ty):
     S = []
