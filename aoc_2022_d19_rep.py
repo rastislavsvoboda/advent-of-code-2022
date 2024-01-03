@@ -23,12 +23,12 @@ def calculate(total_minutes, blueprint):
     GEO = 3
 
     max_ore = max((ore_r_ore, cla_r_ore, obs_r_ore, geo_r_ore))
-    max_clay = obs_r_cla
+    max_cla = obs_r_cla
     max_obs = geo_r_obs
 
     def update_material_with_limit(material, robots, minutes_left):
         ore = min(material[ORE] + robots[ORE], max_ore * minutes_left)
-        cla = min(material[CLA] + robots[CLA], max_clay * minutes_left)
+        cla = min(material[CLA] + robots[CLA], max_cla * minutes_left)
         obs = min(material[OBS] + robots[OBS], max_obs * minutes_left)
         geo = material[GEO] + robots[GEO]  # never limit geo
         return (ore, cla, obs, geo)
@@ -44,12 +44,12 @@ def calculate(total_minutes, blueprint):
         if (materials[ORE] >= geo_r_ore
                 and materials[OBS] >= geo_r_obs
                 and minutes > 1):
-            ore_r, clay_r, obs_r, geo_r = robots
+            ore_r, cla_r, obs_r, geo_r = robots
             new_material = list(materials)
             new_material[ORE] -= geo_r_ore
             new_material[OBS] -= geo_r_obs
             limited_material = update_material_with_limit(new_material, robots, minutes - 1)
-            answer = max(answer, (minutes - 1) + dp(minutes - 1, (ore_r, clay_r, obs_r, geo_r + 1), limited_material))
+            answer = max(answer, (minutes - 1) + dp(minutes - 1, (ore_r, cla_r, obs_r, geo_r + 1), limited_material))
             # don't try other option when GEO will be build
             return answer
 
@@ -59,34 +59,34 @@ def calculate(total_minutes, blueprint):
                 and minutes > 1
                 and robots[OBS] < max_obs
                 and materials[OBS] < max_obs * minutes):
-            ore_r, clay_r, obs_r, geo_r = robots
+            ore_r, cla_r, obs_r, geo_r = robots
             new_material = list(materials)
             new_material[ORE] -= obs_r_ore
             new_material[CLA] -= obs_r_cla
             limited_material = update_material_with_limit(new_material, robots, minutes - 1)
-            answer = max(answer, dp(minutes - 1, (ore_r, clay_r, obs_r + 1, geo_r), limited_material))
+            answer = max(answer, dp(minutes - 1, (ore_r, cla_r, obs_r + 1, geo_r), limited_material))
 
         # build clay
         if (materials[ORE] >= cla_r_ore
                 and minutes > 1
-                and robots[CLA] < max_clay
-                and materials[CLA] < max_clay * minutes):
-            ore_r, clay_r, obs_r, geo_r = robots
+                and robots[CLA] < max_cla
+                and materials[CLA] < max_cla * minutes):
+            ore_r, cla_r, obs_r, geo_r = robots
             new_material = list(materials)
             new_material[ORE] -= cla_r_ore
             limited_material = update_material_with_limit(new_material, robots, minutes - 1)
-            answer = max(answer, dp(minutes - 1, (ore_r, clay_r + 1, obs_r, geo_r), limited_material))
+            answer = max(answer, dp(minutes - 1, (ore_r, cla_r + 1, obs_r, geo_r), limited_material))
 
         # build ore
         if (materials[ORE] >= ore_r_ore
                 and minutes > 1
                 and robots[ORE] < max_ore
                 and materials[ORE] < max_obs * minutes):
-            ore_r, clay_r, obs_r, geo_r = robots
+            ore_r, cla_r, obs_r, geo_r = robots
             new_material = list(materials)
             new_material[ORE] -= ore_r_ore
             limited_material = update_material_with_limit(new_material, robots, minutes - 1)
-            answer = max(answer, dp(minutes - 1, (ore_r + 1, clay_r, obs_r, geo_r), limited_material))
+            answer = max(answer, dp(minutes - 1, (ore_r + 1, cla_r, obs_r, geo_r), limited_material))
 
         # don't build any robot
         new_material = list(materials)
