@@ -128,7 +128,7 @@ print(CRED + "sample:", solve1(lines_sample), CEND)  # 64
 print(CGRN + "puzzle:", solve1(lines_puzzle), CEND)  # 4192
 
 print(CRED + "sample:", solve2(lines_sample), CEND)  # 58
-print(CGRN + "puzzle:", solve2(lines_puzzle), CEND)  #
+print(CGRN + "puzzle:", solve2(lines_puzzle), CEND)  # 2520
 
 stop = datetime.now()
 print("duration:", stop - start)
