@@ -26,12 +26,12 @@ def calculate(total_minutes, blueprint):
     max_clay = obsidian_r_clay
     max_obs = geo_r_obsidian
 
-    def limit_resources(new_material, minutes_left):
-        # limit to max needed resources in left minutes
-        new_material[ORE] = min(new_material[ORE], max_ore * minutes_left)
-        new_material[CLAY] = min(new_material[CLAY], max_clay * minutes_left)
-        new_material[OBS] = min(new_material[OBS], max_obs * minutes_left)
-        return new_material
+    def update_material_with_limit(material, robots, minutes_left):
+        ore = min(material[ORE] + robots[ORE], max_ore * minutes_left)
+        clay = min(material[CLAY] + robots[CLAY], max_clay * minutes_left)
+        obs = min(material[OBS] + robots[OBS], max_obs * minutes_left)
+        geo = material[GEO] + robots[GEO]  # never limit geo
+        return (ore, clay, obs, geo)
 
     @lru_cache(maxsize=None)
     def dp(state):
@@ -46,17 +46,12 @@ def calculate(total_minutes, blueprint):
         if (materials[ORE] >= geo_r_ore
                 and materials[OBS] >= geo_r_obsidian
                 and minutes > 1):
-            new_robots = list(robots)
-            new_robots[GEO] += 1
+            ore_r, clay_r, obs_r, geo_r = robots
             new_material = list(materials)
             new_material[ORE] -= geo_r_ore
             new_material[OBS] -= geo_r_obsidian
-            for i in range(4):
-                new_material[i] += robots[i]
-
-            new_material = limit_resources(new_material, minutes - 1)
-
-            answer = max(answer, (1 * (minutes - 1)) + dp((minutes - 1, tuple(new_robots), tuple(new_material))))
+            limited_material = update_material_with_limit(new_material, robots, minutes - 1)
+            answer = max(answer, (minutes - 1) + dp((minutes - 1, (ore_r, clay_r, obs_r, geo_r + 1), limited_material)))
             # don't try other option when GEO will be build
             return answer
 
@@ -66,58 +61,39 @@ def calculate(total_minutes, blueprint):
                 and minutes > 1
                 and robots[OBS] < max_obs
                 and materials[OBS] < max_obs * minutes):
-            new_robots = list(robots)
-            new_robots[OBS] += 1
+            ore_r, clay_r, obs_r, geo_r = robots
             new_material = list(materials)
             new_material[ORE] -= obsidian_r_ore
             new_material[CLAY] -= obsidian_r_clay
-            for i in range(4):
-                new_material[i] += robots[i]
-
-            new_material = limit_resources(new_material, minutes - 1)
-
-            answer = max(answer, dp((minutes - 1, tuple(new_robots), tuple(new_material))))
+            limited_material = update_material_with_limit(new_material, robots, minutes - 1)
+            answer = max(answer, dp((minutes - 1, (ore_r, clay_r, obs_r + 1, geo_r), limited_material)))
 
         # build clay
         if (materials[ORE] >= clay_r_ore
                 and minutes > 1
                 and robots[CLAY] < max_clay
                 and materials[CLAY] < max_clay * minutes):
-            new_robots = list(robots)
-            new_robots[CLAY] += 1
+            ore_r, clay_r, obs_r, geo_r = robots
             new_material = list(materials)
             new_material[ORE] -= clay_r_ore
-            for i in range(4):
-                new_material[i] += robots[i]
-
-            new_material = limit_resources(new_material, minutes - 1)
-
-            answer = max(answer, dp((minutes - 1, tuple(new_robots), tuple(new_material))))
+            limited_material = update_material_with_limit(new_material, robots, minutes - 1)
+            answer = max(answer, dp((minutes - 1, (ore_r, clay_r + 1, obs_r, geo_r), limited_material)))
 
         # build ore
         if (materials[ORE] >= ore_r_ore
                 and minutes > 1
                 and robots[ORE] < max_ore
                 and materials[ORE] < max_obs * minutes):
-            new_robots = list(robots)
-            new_robots[ORE] += 1
+            ore_r, clay_r, obs_r, geo_r = robots
             new_material = list(materials)
             new_material[ORE] -= ore_r_ore
-            for i in range(4):
-                new_material[i] += robots[i]
-
-            new_material = limit_resources(new_material, minutes - 1)
-
-            answer = max(answer, dp((minutes - 1, tuple(new_robots), tuple(new_material))))
+            limited_material = update_material_with_limit(new_material, robots, minutes - 1)
+            answer = max(answer, dp((minutes - 1, (ore_r + 1, clay_r, obs_r, geo_r), limited_material)))
 
         # don't build any robot
-        new_material = []
-        for i in range(4):
-            new_material.append(materials[i] + robots[i])
-
-        new_material = limit_resources(new_material, minutes - 1)
-
-        answer = max(answer, dp((minutes - 1, robots, tuple(new_material))))
+        new_material = list(materials)
+        limited_material = update_material_with_limit(new_material, robots, minutes - 1)
+        answer = max(answer, dp((minutes - 1, robots, limited_material)))
 
         return answer
 
