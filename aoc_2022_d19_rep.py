@@ -36,12 +36,8 @@ def calculate(total_minutes, blueprint):
         if (ore_m >= geo_r_ore
                 and obs_m >= geo_r_obs
                 and minutes > 1):
-            ore = ore_m - geo_r_ore
-            cla = cla_m
-            obs = obs_m - geo_r_obs
-            geo = geo_m
-            ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-            answer = max(answer, (minutes - 1) + dp(minutes - 1, ore_r, cla_r, obs_r, geo_r + 1, ore, cla, obs, geo))
+            new_mat = update_and_limit(ore_m - geo_r_ore, cla_m, obs_m - geo_r_obs, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+            answer = max(answer, (minutes - 1) + dp(minutes - 1, ore_r, cla_r, obs_r, geo_r + 1, *new_mat))
             # don't try other option when GEO will be build
             return answer
 
@@ -51,44 +47,28 @@ def calculate(total_minutes, blueprint):
                 and minutes > 1
                 and obs_r < max_obs
                 and obs_m < max_obs * minutes):
-            ore = ore_m - obs_r_ore
-            cla = cla_m - obs_r_cla
-            obs = obs_m
-            geo = geo_m
-            ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-            answer = max(answer, dp(minutes - 1, ore_r, cla_r, obs_r + 1, geo_r, ore, cla, obs, geo))
+            new_mat = update_and_limit(ore_m - obs_r_ore, cla_m - obs_r_cla, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+            answer = max(answer, dp(minutes - 1, ore_r, cla_r, obs_r + 1, geo_r, *new_mat))
 
         # build clay
         if (ore_m >= cla_r_ore
                 and minutes > 1
                 and cla_r < max_cla
                 and cla_m < max_cla * minutes):
-            ore = ore_m - cla_r_ore
-            cla = cla_m
-            obs = obs_m
-            geo = geo_m
-            ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-            answer = max(answer, dp(minutes - 1, ore_r, cla_r + 1, obs_r, geo_r, ore, cla, obs, geo))
+            new_mat = update_and_limit(ore_m - cla_r_ore, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+            answer = max(answer, dp(minutes - 1, ore_r, cla_r + 1, obs_r, geo_r, *new_mat))
 
         # build ore
         if (ore_m >= ore_r_ore
                 and minutes > 1
                 and ore_r < max_ore
                 and ore_m < max_obs * minutes):
-            ore = ore_m - ore_r_ore
-            cla = cla_m
-            obs = obs_m
-            geo = geo_m
-            ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-            answer = max(answer, dp(minutes - 1, ore_r + 1, cla_r, obs_r, geo_r, ore, cla, obs, geo))
+            new_mat = update_and_limit(ore_m - ore_r_ore, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+            answer = max(answer, dp(minutes - 1, ore_r + 1, cla_r, obs_r, geo_r, *new_mat))
 
         # don't build any robot
-        ore = ore_m
-        cla = cla_m
-        obs = obs_m
-        geo = geo_m
-        ore, cla, obs, geo = update_and_limit(ore, cla, obs, geo, ore_r, cla_r, obs_r, geo_r, minutes - 1)
-        answer = max(answer, dp(minutes - 1, ore_r, cla_r, obs_r, geo_r, ore, cla, obs, geo))
+        new_mat = update_and_limit(ore_m, cla_m, obs_m, geo_m, ore_r, cla_r, obs_r, geo_r, minutes - 1)
+        answer = max(answer, dp(minutes - 1, ore_r, cla_r, obs_r, geo_r, *new_mat))
 
         return answer
 
@@ -96,7 +76,7 @@ def calculate(total_minutes, blueprint):
 
 
 def solve(text, part):
-    res = 0
+    res = None
 
     B = []
 
@@ -106,22 +86,21 @@ def solve(text, part):
 
     if part == 1:
         minutes = 24
+        res = 0
         for b in B:
             id = b[0]
-            print(f"blueprint {id} of {len(B)}", end="")
             geodes = calculate(minutes, b)
-            print(f" -> {geodes}")
+            print(f"blueprint {id} of {len(B)} -> {geodes}")
             res += id * geodes
 
     elif part == 2:
         minutes = 32
         res = 1
-        B_to_use = B[:3]
-        for b in B_to_use:
+        B = B[:3] # use only first 3 blueprints
+        for b in B:
             id = b[0]
-            print(f"blueprint {id} of {len(B_to_use)}", end="")
             geodes = calculate(minutes, b)
-            print(f" -> {geodes}")
+            print(f"blueprint {id} of {len(B)} -> {geodes}")
             res *= geodes
 
     return res
