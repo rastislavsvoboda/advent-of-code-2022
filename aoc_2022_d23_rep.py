@@ -11,38 +11,32 @@ text_sample = open('23.ex1').read()
 
 
 def is_other_elf_around(r, c, G):
-    cnt = 0
-    for dr in (-1, 0, 1):
-        for dc in (-1, 0, 1):
-            if (r + dr, c + dc) in G:
-                cnt += 1
-    assert cnt >= 1
-    return cnt > 1
+    return any([(rr, cc) in G for (rr, cc) in neighbours8(r, c)])
 
 
-def propose(r, c, G, prop):
-    p = prop
+def propose(r, c, G, p):
+    D = [-1, 0, 1]
 
     for dp in range(4):
         pp = (p + dp) % 4
         if pp == 0:
             # N, NE, NW
-            if (not (r - 1, c) in G) and not (r - 1, c + 1) in G and not (r - 1, c - 1) in G:
+            if all([not (r - 1, c + dc) in G for dc in D]):
                 return (r - 1, c)
         elif pp == 1:
             # S, SE, SW
-            if (not (r + 1, c) in G) and not (r + 1, c + 1) in G and not (r + 1, c - 1) in G:
+            if all([not (r + 1, c + dc) in G for dc in D]):
                 return (r + 1, c)
         elif pp == 2:
             # W, NW, SW
-            if (not (r, c - 1) in G) and not (r - 1, c - 1) in G and not (r + 1, c - 1) in G:
+            if all([not (r + dr, c - 1) in G for dr in D]):
                 return (r, c - 1)
         elif pp == 3:
             # E, NE, SE
-            if (not (r, c + 1) in G) and not (r - 1, c + 1) in G and not (r + 1, c + 1) in G:
+            if all([not (r + dr, c + 1) in G for dr in D]):
                 return (r, c + 1)
         else:
-            assert prop, f"Wrong prop {prop}"
+            assert p, f"Wrong propose index {p}"
 
     return (r, c)
 
@@ -79,16 +73,16 @@ def solve(text, part):
         t += 1
         if part == 1:
             if t == 10:
-                coords = list(G.keys())
-                min_r = min([r for (r, c) in coords])
-                max_r = max([r for (r, c) in coords])
-                min_c = min([c for (r, c) in coords])
-                max_c = max([c for (r, c) in coords])
+                elfs = list(G.keys())
+                min_r = min([r for (r, c) in elfs])
+                max_r = max([r for (r, c) in elfs])
+                min_c = min([c for (r, c) in elfs])
+                max_c = max([c for (r, c) in elfs])
 
                 area = (max_r - min_r + 1) * (max_c - min_c + 1)
-                elfs = len(coords)
-                res = area - elfs
-                assert elfs == N
+                elfs_cnt = len(elfs)
+                res = area - elfs_cnt
+                assert elfs_cnt == N
                 break
         elif part == 2:
             if not any_moved:
