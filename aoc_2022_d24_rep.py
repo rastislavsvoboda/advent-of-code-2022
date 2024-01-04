@@ -9,17 +9,15 @@ start = datetime.now()
 text_puzzle = open('24.in').read()
 text_sample2 = open('24.ex2').read()
 
-# Up, Right, Down, Left
-DIRS = {"^": (-1, 0), ">": (0, 1), "v": (1, 0), "<": (0, -1)}
-
 
 def move_bliz(R, C, bliz):
+    DIRS = {"^": (-1, 0), ">": (0, 1), "v": (1, 0), "<": (0, -1)}
     new_bliz = []
     for (r, c), ch in bliz:
         dr, dc = DIRS[ch]
         r += dr
         c += dc
-        # wrap around
+        # wrap around (using % is quite slower)
         if r == R - 1:
             r = 1
         elif r == 0:
@@ -95,6 +93,7 @@ def solve(text):
     G = [list(line) for line in text.split("\n")]
     R = len(G)
     C = len(G[0])
+    # blizzards are in internal part of G, without outer frame
     B = [((r, c), G[r][c]) for r in range(1, R - 1) for c in range(1, C - 1) if G[r][c] != "."]
 
     start_c = G[0].index(".")
