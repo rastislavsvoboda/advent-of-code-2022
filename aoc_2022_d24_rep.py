@@ -15,8 +15,8 @@ DIRS = {"^": (-1, 0), ">": (0, 1), "v": (1, 0), "<": (0, -1)}
 
 def move_bliz(R, C, bliz):
     new_bliz = []
-    for (r, c), dir_ in bliz:
-        dr, dc = DIRS[dir_]
+    for (r, c), ch in bliz:
+        dr, dc = DIRS[ch]
         r += dr
         c += dc
         # wrap around
@@ -28,7 +28,7 @@ def move_bliz(R, C, bliz):
             c = 1
         elif c == 0:
             c = C - 2
-        new_bliz.append(((r, c), dir_))
+        new_bliz.append(((r, c), ch))
     return new_bliz
 
 
@@ -42,17 +42,14 @@ def get_bliz_at(R, C, bliz, t, memo):
         if t in memo:
             return memo[t]
 
-        prev_bliz = dp(t - 1)
-        new_bliz = move_bliz(R, C, prev_bliz)
-
-        memo[t] = new_bliz
+        memo[t] = move_bliz(R, C, dp(t - 1))
         return memo[t]
 
     return dp(t)
 
 
 def has_bliz_at_pos(r, c, bliz):
-    for (b_pos, b_dir) in bliz:
+    for (b_pos, _) in bliz:
         if (r, c) == b_pos:
             return True
     return False
@@ -95,19 +92,10 @@ def get_time(G, R, C, B, memo, start_pos, end_pos, start_time):
 
 
 def solve(text):
-    B = []
-    G = []
-    for r, line in enumerate(text.split("\n")):
-        row = []
-        for c, ch in enumerate(line.strip()):
-            if ch in DIRS.keys():
-                B.append(((r, c), ch))
-                ch = "."
-            row.append(ch)
-        G.append(row)
-
+    G = [list(line) for line in text.split("\n")]
     R = len(G)
     C = len(G[0])
+    B = [((r, c), G[r][c]) for r in range(1, R - 1) for c in range(1, C - 1) if G[r][c] != "."]
 
     start_c = G[0].index(".")
     end_c = G[R - 1].index(".")
